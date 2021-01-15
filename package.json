@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "standard --fix && npx nodemon app.js"
+    "start": "npx nodemon app.js"
   },
   "author": "",
   "license": "ISC",
