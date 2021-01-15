@@ -12,6 +12,7 @@ const {
   settingWorkersModel
 } = require('../model/m_workers')
 const { patch } = require('../routes/workers')
+const response = require('../helper/response')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -173,10 +174,12 @@ module.exports = {
           }
         })
         const mailOptions = {
-          from: '"Kerjain.com 👻" <junedpembawaberkah@gmail.com>', // sender address
+          from: '"Kerjain.com 👻" <Kerjain@gmail.com', // sender address
           to: user_email, // list of receivers
           subject: 'Kerjain.com - Forgot Password', // Subject line
-          html: `<a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
+          html: `<p>Account${user_email}</p>
+          <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
+          <a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -193,5 +196,6 @@ module.exports = {
     } catch (error) {
       console.log(error)
     }
-  }
+  },
+  resetPassword: async (request, response) => {}
 }

@@ -7,8 +7,13 @@ router.use('/workers', workers)
 const recruiter = require('./routes/recruiter')
 router.use('/recruiter', recruiter)
 
-const home = require('./routes/rHome')
-
+// ==> Home <==
+const home = require('./routes/home')
 router.use('/home', home)
 
+// ==> Profile <==
+const porto = require('./routes/porto')
+const skill = require('./routes/r_skill')
+router.use('/porto', porto)
+router.use('/skill', skill)
 module.exports = router
