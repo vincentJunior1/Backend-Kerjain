@@ -1,19 +1,14 @@
-const router = require('Express').Router()
-// ==> Workers <==
+const router = require('express').Router()
 const workers = require('./routes/workers')
-router.use('/workers', workers)
-
-// ==> Recruiter <==
 const recruiter = require('./routes/recruiter')
-router.use('/recruiter', recruiter)
-
-// ==> Home <==
-const home = require('./routes/home')
-router.use('/home', home)
-
-// ==> Profile <==
+const home = require('./routes/rHome')
 const porto = require('./routes/porto')
 const skill = require('./routes/r_skill')
+
+router.use('/workers', workers)
+router.use('/recruiter', recruiter)
+router.use('/home', home)
 router.use('/porto', porto)
 router.use('/skill', skill)
+
 module.exports = router

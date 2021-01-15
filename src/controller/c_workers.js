@@ -11,8 +11,6 @@ const {
   dataByIdModel,
   settingWorkersModel
 } = require('../model/m_workers')
-const { patch } = require('../routes/workers')
-const response = require('../helper/response')
 
 module.exports = {
   DataWorkers: async (request, response) => {

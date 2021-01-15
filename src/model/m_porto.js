@@ -1,4 +1,4 @@
-pconst connection = require('../config/mysql')
+const connection = require('../config/mysql')
 
 module.exports = {
   getPorto: () => {
@@ -69,3 +69,4 @@ module.exports = {
       )
     })
   }
+}
