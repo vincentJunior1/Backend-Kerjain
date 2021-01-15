@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
@@ -10,6 +11,7 @@ const {
   dataByIdModel,
   settingWorkersModel
 } = require('../model/m_workers')
+const { patch } = require('../routes/workers')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -147,6 +149,49 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad request', error)
+    }
+  },
+  forgotPassword: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { user_email } = request.body
+      const checkDataUser = await loginCheckModel(user_email)
+      const keys = Math.round(Math.random() * 10000)
+      if (checkDataUser.length >= 1) {
+        const setData = {
+          user_key: keys,
+          user_updated_at: new Date()
+        }
+        await settingWorkersModel(setData, checkDataUser[0].user_id)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'kostkost169@gmail.com', // generated ethereal user
+            pass: 'admin@123456' // generated ethereal password
+          }
+        })
+        const mailOptions = {
+          from: '"Kerjain.com 👻" <junedpembawaberkah@gmail.com>', // sender address
+          to: user_email, // list of receivers
+          subject: 'Kerjain.com - Forgot Password', // Subject line
+          html: `<a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
+        }
+        await transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error)
+            return helper.response(response, 400, 'Email not send !')
+          } else {
+            console.log(info)
+            return helper.response(response, 200, 'Email has been send !')
+          }
+        })
+      } else {
+        return helper.response(response, 400, 'Email / Account not Registed !')
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 }

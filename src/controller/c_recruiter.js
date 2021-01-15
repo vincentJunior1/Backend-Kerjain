@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-// const fs = require('fs')
+const fs = require('fs')
 
 const {
   registerRequiter,

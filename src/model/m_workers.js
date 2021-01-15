@@ -49,21 +49,20 @@ module.exports = {
       )
     })
   },
-  settingWorkersModel: (id, setData) => {
+  settingWorkersModel: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'UPDATE user SET ? WHERE user_id = ?',
         [setData, id],
-        (error, result) => {
-          if (!error) {
-            const newResult = {
+        (err, res) => {
+          if (!err) {
+            const newRes = {
               user_id: id,
               ...setData
             }
-            resolve(newResult)
+            resolve(newRes)
           } else {
-            console.log(error)
-            reject(new Error(error))
+            reject(new Error(err))
           }
         }
       )
