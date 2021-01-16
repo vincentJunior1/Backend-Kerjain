@@ -40,8 +40,8 @@ module.exports = {
         totalPage,
         limit,
         totalData,
-        nextLink: nextLink && `http://localhost:3000/home?${nextLink}`,
-        prevLink: prevLink && `http://localhost:3000/home?${prevLink}`
+        nextLink: nextLink && `http://localhost:3000/home/home?${nextLink}`,
+        prevLink: prevLink && `http://localhost:3000/home/home?${prevLink}`
       }
 
       console.log('pageInfo ' + pageInfo.page)
