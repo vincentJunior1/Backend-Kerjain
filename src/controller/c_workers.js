@@ -8,6 +8,7 @@ const {
   loginCheckModel,
   registerUserModel,
   dataWorkersModel,
+  dataAllWorkers,
   dataByIdModel,
   getUserByKeyModel,
   settingWorkersModel
@@ -16,7 +17,7 @@ const {
 module.exports = {
   DataWorkers: async (request, response) => {
     try {
-      const result = await dataWorkersModel()
+      const result = await dataAllWorkers()
       return helper.response(response, 200, 'get Data suscces full', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -89,7 +90,6 @@ module.exports = {
   registerWorkers: async (request, response) => {
     try {
       //   console.log(request.body)
-      // user phone nya ngikut sama table contact
       const { user_name, user_email, user_password } = request.body
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
