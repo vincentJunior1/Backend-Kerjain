@@ -5,12 +5,16 @@ const {
   dataRecruiter,
   registerRecruiter,
   loginRecruiter,
+  forgotPassword,
+  resetPassword,
   settingRecruiter
 } = require('../controller/c_recruiter')
 
-// => Recruiter
+// ==> Recruiter <==
 router.get('/', dataRecruiter)
 router.post('/register', registerRecruiter)
 router.post('/login', loginRecruiter)
+router.post('/forgot', forgotPassword)
+router.patch('/reset', resetPassword)
 router.patch('/:id', uploadImage, settingRecruiter)
 module.exports = router

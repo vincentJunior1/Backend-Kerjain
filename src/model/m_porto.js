@@ -3,19 +3,23 @@ const connection = require('../config/mysql')
 module.exports = {
   getPorto: () => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM portofolio', (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
+      console.log(
+        connection.query('SELECT * FROM portofolio', (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        })
+      )
     })
   },
   getPortoById: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM portofolio WHERE porto_id = ${id}`,
-        (error, result) => {
-          console.log(result)
-          !error ? resolve(result) : reject(new Error(error))
-        }
+      console.log(
+        connection.query(
+          `SELECT * FROM portofolio WHERE porto_id = ${id}`,
+          (error, result) => {
+            console.log(result)
+            !error ? resolve(result) : reject(new Error(error))
+          }
+        )
       )
     })
   },

@@ -9,6 +9,7 @@ const {
   registerUserModel,
   dataWorkersModel,
   dataByIdModel,
+  getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
 
@@ -92,6 +93,7 @@ module.exports = {
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
+        user_image: 'blank-profile.jpg',
         user_name,
         user_email,
         user_password: encryptPassword
@@ -135,10 +137,10 @@ module.exports = {
         user_updated_at: new Date()
       }
       const checkUser = await dataByIdModel(id)
-      // console.log(checkUser)
-      // fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-      //   if (error) return helper.response(response, 400, 'gagal')
-      // })
+      console.log(checkUser)
+      fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
+        if (error) return helper.response(response, 400, 'gagal')
+      })
       if (checkUser.length > 0) {
         const result = await settingWorkersModel(id, setData)
         console.log(result)
@@ -173,6 +175,7 @@ module.exports = {
         })
         const mailOptions = {
           from: '"Kerjain.com 👻" <Kerjain@gmail.com', // sender address
+          // from: '"Kerjain.com 👻" <Kerjain@gmail.com.id>', // sender address
           to: user_email, // list of receivers
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<p>Account${user_email}</p>
@@ -195,5 +198,58 @@ module.exports = {
       console.log(error)
     }
   },
-  resetPassword: async (request, response) => {}
+  resetPassword: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { key, newPassword, confirmPassword } = request.body
+      if (newPassword.length < 8 || newPassword.length > 16) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8-16 characters long'
+        )
+      } else if (newPassword !== confirmPassword) {
+        return helper.response(
+          response,
+          400,
+          `Password didn't match ${newPassword}`
+        )
+      } else {
+        const getKeys = await getUserByKeyModel(key)
+        console.log(getKeys)
+        if (getKeys.length < 1) {
+          return helper.response(response, 400, 'Bad Request')
+        } else {
+          const userId = getKeys[0].user_id
+          const update = new Date() - getKeys[0].user_updated_at
+          const changeKeys = Math.floor(update / 1000 / 60)
+          if (changeKeys >= 5) {
+            const setData = {
+              user_key: 0,
+              user_updated_at: new Date()
+            }
+            await settingWorkersModel(setData, userId)
+            return helper.response(
+              response,
+              400,
+              'Please confirm password again, keys is expires :))'
+            )
+          } else {
+            // new Password
+            const salt = bcrypt.genSaltSync(7)
+            const encryptPassword = bcrypt.hashSync(newPassword, salt)
+            setData = {
+              user_password: encryptPassword,
+              user_key: 0,
+              user_updated_at: new Date()
+            }
+            await settingWorkersModel(setData, userId)
+            return helper.response(response, 200, 'Passwors Succes change yey')
+          }
+        }
+      }
+    } catch (error) {
+      return helper(response, 400, 'Bad Request', error)
+    }
+  }
 }
