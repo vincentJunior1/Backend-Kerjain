@@ -31,6 +31,7 @@ module.exports = {
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
+        user_img: 'blank-profile.jpg',
         user_name,
         user_email,
         user_job_type,
@@ -132,16 +133,15 @@ module.exports = {
       }
       const checkUser = await dataByIdModel(id)
       console.log(checkUser)
-      // fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-      //   if (error) return helper.response(response, 400, 'gagal')
-      // })
-      // if (checkUser.length > 0) {
-      //   const result = await settingWorkersModel(id, setData)
-      //   console.log(result)
-      //   return helper.response(response, 200, 'Data updated', result)
-      // } else {
-      //   return helper.response(response, 404, `Data Not Found By Id ${id}`)
-      // }
+      fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
+        if (error) return helper.response(response, 400, 'gagal')
+      })
+      if (checkUser.length > 0) {
+        const result = await settingRecruiterModel(setData, id)
+        return helper.response(response, 200, 'Data updated', result)
+      } else {
+        return helper.response(response, 404, `Data Not Found By Id ${id}`)
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad request', error)
     }
