@@ -89,6 +89,7 @@ module.exports = {
   registerWorkers: async (request, response) => {
     try {
       //   console.log(request.body)
+      // user phone nya ngikut sama table contact
       const { user_name, user_email, user_password } = request.body
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
@@ -175,10 +176,9 @@ module.exports = {
         })
         const mailOptions = {
           from: '"Kerjain.com 👻" <Kerjain@gmail.com', // sender address
-          // from: '"Kerjain.com 👻" <Kerjain@gmail.com.id>', // sender address
           to: user_email, // list of receivers
           subject: 'Kerjain.com - Forgot Password', // Subject line
-          html: `<p>Account${user_email}</p>
+          html: `<p>To Account   ${user_email}</p>
           <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
           <a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
         }

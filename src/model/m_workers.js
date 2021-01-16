@@ -1,10 +1,20 @@
 const connection = require('../config/mysql')
 
 module.exports = {
+  Get_dataAllWorkers: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user INNER JOIN contact ON user.user_id = user.user_id INNER JOIN portofolio ON user.user_id = portofolio.user_id INNER JOIN skill ON user.user_id = skill.user_id INNER JOIN exp ON user.user_id = exp.user_id',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   dataWorkersModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_role = 1 ',
+        'SELECT * FROM user WHERE user_role = 0 ',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
