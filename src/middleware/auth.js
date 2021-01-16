@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken')
 const helper = require('../helper/response')
 
 module.exports = {
-  authPekerja: (request, response, next) => {
-    let token = request.headers.authPekerja
+  authWorkers: (request, response, next) => {
+    let token = request.headers.authWorkers
     console.log(token)
     token = token.split(' ')[1]
     jwt.verify(token, 'KERJAIN', (error, result) => {
@@ -20,8 +20,8 @@ module.exports = {
       }
     })
   },
-  authRequiter: (request, response, next) => {
-    let token = request.headers.authRequiter
+  authRecruiter: (request, response, next) => {
+    let token = request.headers.authRecruiter
     token = token.split(' ')[1]
     jwt.verify(token, 'KERJAIN', (error, result) => {
       if (

@@ -10,7 +10,7 @@ const {
   settingRecruiter
 } = require('../controller/c_recruiter')
 
-// => Recruiter
+// ==> Recruiter <==
 router.get('/', dataRecruiter)
 router.post('/register', registerRecruiter)
 router.post('/login', loginRecruiter)

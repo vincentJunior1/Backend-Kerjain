@@ -174,7 +174,7 @@ module.exports = {
           }
         })
         const mailOptions = {
-          from: '"Kerjain.com 👻" <junedpembawaberkah@gmail.com>', // sender address
+          from: '"Kerjain.com 👻" <Kerjain@gmail.com.id>', // sender address
           to: user_email, // list of receivers
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
