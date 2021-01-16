@@ -198,7 +198,7 @@ module.exports = {
   resetPassword: async (request, response) => {
     try {
       console.log(request.body)
-      const { keys, newPassword, confirmPassword } = request.body
+      const { key, newPassword, confirmPassword } = request.body
       if (newPassword.length < 8 || newPassword.length > 16) {
         return helper.response(
           response,
@@ -212,7 +212,8 @@ module.exports = {
           `Password didn't match ${newPassword}`
         )
       } else {
-        const getKeys = await getUserByKeyModel(user_key)
+        const getKeys = await getUserByKeyModel(key)
+        console.log(getKeys)
         if (getKeys.length < 1) {
           return helper.response(response, 400, 'Bad Request')
         } else {
