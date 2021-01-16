@@ -9,6 +9,7 @@ const {
   loginCheckModel,
   dataRecruiterModel,
   dataByIdModel,
+  getUserByKeyModel,
   settingRecruiterModel
 } = require('../model/m_recruiter')
 
@@ -235,7 +236,7 @@ module.exports = {
               user_key: 0,
               user_updated_at: new Date()
             }
-            await settingWorkersModel(setData, userId)
+            await settingRecruiterModel(setData, userId)
             return helper.response(response, 200, 'Passwors Succes change yey')
           }
         }
