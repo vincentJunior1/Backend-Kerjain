@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const workers = require('./routes/workers')
 const recruiter = require('./routes/recruiter')
-const home = require('./routes/rHome')
+const home = require('./routes/r_home')
 const porto = require('./routes/porto')
 const skill = require('./routes/r_skill')
 
