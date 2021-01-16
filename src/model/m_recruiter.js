@@ -44,6 +44,16 @@ module.exports = {
         'SELECT user_id, user_email, user_password ,user_role FROM user WHERE user_email = ?',
         account,
         (error, result) => {
+          !error ? resolve(result[0].total) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getUserCountIdModel: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(*) AS total FROM user WHERE user_id=${id}`,
+        (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
       )

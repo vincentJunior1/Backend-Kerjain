@@ -36,6 +36,8 @@ module.exports = {
       connection.query(
         'SELECT skill_id, user_id, GROUP_CONCAT(skill_name) AS skills, skill_created_at, skill_updated_at FROM skill GROUP BY user_id',
         (error, result) => {
+          console.log('ini result')
+          console.log(result)
           !error ? resolve(result) : reject(new Error(error))
         }
       )

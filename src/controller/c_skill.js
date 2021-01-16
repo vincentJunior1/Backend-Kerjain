@@ -26,6 +26,7 @@ module.exports = {
   },
   getAllSkillAllUser: async (req, res) => {
     try {
+      console.log('masuk')
       const result = await getAllSkillAllUserModel()
       if (result.length > 0) {
         return helper.response(res, 200, 'Success Get  skills', result)
