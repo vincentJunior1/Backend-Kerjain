@@ -4,7 +4,7 @@ module.exports = {
   dataRecruiterModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_role = 0',
+        'SELECT * FROM user WHERE user_role = 1',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
