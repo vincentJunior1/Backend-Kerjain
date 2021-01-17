@@ -104,6 +104,21 @@ module.exports = {
         return helper.response(response, 400, 'Email has been register :((')
       } else if (request.body.user_email === '') {
         return helper.response(response, 400, 'Insert EMAIL Please :))')
+      } else if (request.body.user_email.search('@') < 1) {
+        return helper.response(
+          response,
+          400,
+          'Email not valid  !!, must be @ s'
+        )
+      } else if (
+        request.body.user_password < 8 ||
+        request.body.user_password > 16
+      ) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8 - 16 characters '
+        )
       } else if (request.body.user_password === '') {
         return helper.response(response, 400, 'Insert Password Please')
       } else if (request.body.user_phone === '') {
@@ -143,7 +158,7 @@ module.exports = {
         if (error) return helper.response(response, 400, 'gagal')
       })
       if (checkUser.length > 0) {
-        const result = await settingWorkersModel(id, setData)
+        const result = await settingWorkersModel(setData, id)
         console.log(result)
         return helper.response(response, 200, 'Data updated', result)
       } else {
@@ -244,7 +259,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingWorkersModel(setData, userId)
-            return helper.response(response, 200, 'Passwors Succes change yey')
+            return helper.response(response, 200, 'Password Succes change yey')
           }
         }
       }
