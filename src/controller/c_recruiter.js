@@ -52,6 +52,7 @@ module.exports = {
       const {
         user_name,
         user_email,
+        user_phone,
         user_password,
         confirm_password
       } = request.body
@@ -63,6 +64,7 @@ module.exports = {
       const setData = {
         user_name,
         user_email,
+        user_phone,
         user_role: 1,
         user_password: encryptPassword
       }

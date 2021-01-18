@@ -112,6 +112,7 @@ module.exports = {
         user_name,
         user_email,
         user_phone,
+        user_role: 0,
         user_password: encryptPassword
       }
       const checkDataUser = await loginCheckModel(user_email)

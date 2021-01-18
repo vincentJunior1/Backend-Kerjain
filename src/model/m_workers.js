@@ -54,6 +54,7 @@ module.exports = {
           delete newResult.user_password
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
