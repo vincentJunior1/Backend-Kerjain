@@ -1,6 +1,7 @@
 const {
   getSkillPerUserModel,
   getAllSkillAllUserModel,
+  getUserSkill,
   postSkillModel,
   patchSkillModel,
   countSkillModel,
@@ -30,9 +31,22 @@ module.exports = {
   getAllSkillAllUser: async (req, res) => {
     try {
       const result = await getAllSkillAllUserModel()
-      if (result.length > 0) {
+      if (result) {
         client.setex('getskills', 3600, JSON.stringify(result))
         return helper.response(res, 200, 'Success Get  skills', result)
+      } else {
+        return helper.response(res, 404, 'Skill Not Found')
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getUserSkill: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await getUserSkill(id)
+      if (result.length > 0) {
+        return helper.response(res, 200, 'Success get user skills', result)
       } else {
         return helper.response(res, 404, 'Skill Not Found')
       }
