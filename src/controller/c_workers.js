@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-// const fs = require('fs')
 
 const {
   loginCheckModel,
@@ -13,8 +12,6 @@ const {
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
-// const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
-// const { getAllContact } = require('./c_contact')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -84,12 +81,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(
-              response,
-              200,
-              'Succes Login + Pekerja +',
-              result
-            )
+            return helper.response(response, 200, 'Succes Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
@@ -104,12 +96,22 @@ module.exports = {
   registerWorkers: async (request, response) => {
     try {
       //   console.log(request.body)
-      const { user_name, user_email, user_password } = request.body
+      const {
+        user_name,
+        user_email,
+        user_phone,
+        user_password,
+        confirm_password
+      } = request.body
+      if (user_password !== confirm_password) {
+        return helper.response(response, 400, 'Password  not match')
+      }
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
         user_name,
         user_email,
+        user_phone,
         user_password: encryptPassword
       }
       const checkDataUser = await loginCheckModel(user_email)
@@ -150,30 +152,29 @@ module.exports = {
       const { id } = request.params
       const {
         user_name,
+        user_job_type,
         user_jobdesc,
         user_location,
         user_workplace,
         user_description,
-        contact_linkedin,
-        contact_phone,
-        contact_instagram,
-        contact_github
+        user_linkedin,
+        user_phone,
+        user_instagram
       } = request.body
-
-      const checkUser = await dataByCheckId(id)
+      const setData = {
+        user_name,
+        user_job_type,
+        user_jobdesc,
+        user_location,
+        user_workplace,
+        user_description,
+        user_linkedin,
+        user_phone,
+        user_instagram,
+        user_updated_at: new Date()
+      }
+      const checkUser = await dataByIdModel(id)
       if (checkUser.length > 0) {
-        const setData = {
-          user_name,
-          user_jobdesc,
-          user_location,
-          user_workplace,
-          user_description,
-          contact_linkedin,
-          contact_phone,
-          contact_instagram,
-          contact_github,
-          user_updated_at: new Date()
-        }
         const result = await settingWorkersModel(setData, id)
         console.log(result)
         return helper.response(response, 200, 'Data updated', result)
@@ -211,7 +212,7 @@ module.exports = {
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<p>To Account   ${user_email}</p>
           <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
-          <a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
+          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
