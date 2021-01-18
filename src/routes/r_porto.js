@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {
   getPorto,
+  getPortoByUserId,
   postPorto,
   patchPorto,
   deletePorto
@@ -8,6 +9,7 @@ const {
 const uploadImage = require('../middleware/multer_porto')
 
 router.get('/', getPorto)
+router.get('/:id', getPortoByUserId)
 router.post('/', uploadImage, postPorto)
 router.patch('/:id', uploadImage, patchPorto)
 router.delete('/:id', deletePorto)

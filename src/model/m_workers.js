@@ -4,7 +4,7 @@ module.exports = {
   dataAllWorkers: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT user.user_id ,user.user_name , user.user_email, user.user_role, user.user_image, user.user_description, user.user_status, user.user_jobdesc, user.user_field, user.user_location, user.user_workplace, user.user_about, user.user_job_type, user.user_linkedin, user.user_instagram, user.user_phone, user.user_github, skill.skill_name ,exp.exp_id, exp.exp_position, exp.exp_company, exp.exp_desc, exp.exp_start, exp.exp_end FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id WHERE user_role = 0 GROUP BY user.user_id',
+        'SELECT * FROM user LEFT JOIN (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub ON sub.user_id = user.user_id LEFT JOIN (SELECT portofolio.user_id, GROUP_CONCAT(DISTINCT(portofolio.porto_id)) AS portos FROM portofolio GROUP BY portofolio.user_id) sub2 ON sub2.user_id = user.user_id LEFT JOIN (SELECT exp.user_id, GROUP_CONCAT(DISTINCT(exp.exp_id)) AS exps FROM exp GROUP BY exp.user_id) sub3 ON sub3.user_id = user.user_id WHERE user.user_role=1',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -86,17 +86,17 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query(
         'UPDATE user SET ? WHERE user_id = ?',
-        [setData, id],
-        (err, res) => {
-          if (!err) {
-            const newRes = {
-              user_id: id,
+        setData,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              user_id: result.insertId,
               ...setData
             }
-            resolve(newRes)
+            delete newResult.user_password
+            resolve(newResult)
           } else {
-            console.log(error)
-            reject(new Error(err))
+            reject(new Error(error))
           }
         }
       )

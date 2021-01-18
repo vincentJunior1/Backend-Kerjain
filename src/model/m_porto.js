@@ -23,6 +23,19 @@ module.exports = {
       )
     })
   },
+  getPortoByUserId: (id) => {
+    return new Promise((resolve, reject) => {
+      console.log(
+        connection.query(
+          `SELECT * FROM portofolio WHERE user_id = ${id}`,
+          (error, result) => {
+            console.log(result)
+            !error ? resolve(result) : reject(new Error(error))
+          }
+        )
+      )
+    })
+  },
   postPorto: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
