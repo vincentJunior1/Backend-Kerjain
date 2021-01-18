@@ -1,6 +1,7 @@
 const {
   getPorto,
   getPortoById,
+  getPortoByUserId,
   postPorto,
   patchPorto,
   deletePorto
@@ -31,6 +32,28 @@ module.exports = {
       }
 
       return helper.response(response, 200, 'Success get portofolio', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getPortoByUserId: async (request, response) => {
+    try {
+      const { id } = request.params
+      const result = await getPortoByUserId(id)
+      if (result.length > 0) {
+        return helper.response(
+          response,
+          200,
+          `success get portofolio by user ${id}`,
+          result
+        )
+      } else {
+        return helper.response(
+          response,
+          404,
+          `Portofolio by user id : ${id} Not Found`
+        )
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
