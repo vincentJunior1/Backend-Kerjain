@@ -1,4 +1,5 @@
 -- phpMyAdmin SQL Dump
+<<<<<<< HEAD:kerjain_db.sql
 -- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
@@ -6,8 +7,18 @@
 -- Generation Time: Jan 16, 2021 at 02:56 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
+=======
+-- version 4.9.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jan 16, 2021 at 04:05 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.3.13
+>>>>>>> 81464da99e52e5f73cf1a96a16efcce1656b35cc:kerjain_db (1).sql
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -86,6 +97,10 @@ INSERT INTO `exp` (`exp_id`, `user_id`, `exp_position`, `exp_company`, `exp_desc
 (2, 2, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:25:18', '0000-00-00 00:00:00'),
 (3, 3, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:35:58', '0000-00-00 00:00:00'),
 (4, 3, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:36:01', '0000-00-00 00:00:00');
+<<<<<<< HEAD:kerjain_db.sql
+=======
+
+>>>>>>> 81464da99e52e5f73cf1a96a16efcce1656b35cc:kerjain_db (1).sql
 -- --------------------------------------------------------
 
 --
@@ -166,12 +181,27 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`, `user_image`, `user_description`, `user_status`, `user_created_at`, `user_updated_at`, `user_jobdesc`, `user_field`, `user_key`, `user_location`, `user_workplace`, `user_about`, `user_job_type`, `contact_id`) VALUES
+<<<<<<< HEAD:kerjain_db.sql
 (1, 'Kyara Amanda Rolan', 'amandarolan@gmail.com', '12345', 0, 'abc.jpg', 'jobseeker', 1, '2021-01-14 19:24:30', NULL, 'Programmer', 'Web Developer', 0, 'Padang', 'Jakarta', 'aaasassas', 'freelance', 1),
 (2, 'Rina M', 'rinam@gmail.com', '12345', 0, 'abc.jpg', 'jobseeker', 1, '2021-01-14 19:26:13', NULL, 'Programmer', 'Web Developer', 0, 'Makassar', 'Jakarta', 'aaasassas', 'freelance', 2),
 (3, 'Roni', 'roni@gmail.com', '12345', 0, 'abc.jpg', 'jobseeker', 1, '2021-01-14 19:26:47', NULL, 'Programmer', 'Web Developer', 0, 'Jakarta', 'Bandung', 'aaasassas', 'freelance', 3),
 (4, 'Margareth', 'reta@gmail.com', '12345', 1, 'abc.jpg', 'jobseeker', 1, '2021-01-14 19:27:23', NULL, 'Programmer', 'Web Developer', 0, 'Jakarta', 'Bandung', 'aaasassas', 'fulltime', 4),
 (5, 'Trias', 'trias@yahoo.com', '2675', 0, 'efg.png', 'Human', 1, '2021-01-16 07:16:56', NULL, 'Fullstack Dev', 'IT', 0, 'Jakarta', 'Jakarta', 'Human', 'Fulltime', 0),
 (6, 'riskyamaliaharis', 'amaliaharisr@gmail.com', '$2b$10$gUpJa0YTzEripyI8hViESufwKrqbVS37XmLCTToUyMfTjeJGDsS2e', 0, '', 'gogogo', 0, '2021-01-16 10:20:39', NULL, 'Trainee', 'Web Developer', 0, 'Makassar', 'Batam', 'Me', 'Fulltime', 0);
+=======
+(1, 'edit berhasil', 'test@gmail.com', '$2b$10$0McyeuHwLCxeJQdd5s/X5.akhAiSb7E2jEELx5uKylsoObQcXx0d.', 0, '2021-01-15T12-54-10.631Zdownload (1).jpg', 'edit berhasil', 0, '2021-01-14 19:34:01', '2021-01-15 12:54:10', 'edit berhasil', '', 0, 'edit berhasil', 'edit berhasil', '', '', 0),
+(2, 'testing', 'testing@gmail.com', '$2b$10$PqzL6FDkooDzPk4HXN3L4.T5LtJts1vJDWTuf6d3/XzL8Bf8MUaGm', 0, '', '', 0, '2021-01-14 19:59:03', NULL, '', '', 0, '', '', '', '', 0),
+(3, 'testing', 'testing1@gmail.com', '$2b$10$RVAt0lY6NopapQf7Lou6Iebwvu/2/9arhRmnP3iAmoff3zxN1JuiW', 0, '', '', 0, '2021-01-14 20:29:53', NULL, '', '', 0, '', '', '', '', 0),
+(4, 'millaaprillya', 'milla@gmail.com', '$2b$10$Yy7xUQ13s8OvAMWmHWVDSeOhawqlbPcC4h9aGnI3Qt/MSLQRmqAUi', 0, '', '', 0, '2021-01-15 00:24:55', NULL, '', '', 0, '', '', '', '', 0),
+(5, 'companyid.com', 'company@gmail.com', '$2b$10$PJG5RcI6K8pKbWvMT5B5m.tfLBd.DwNmxftPzhr5UPUV9e5o5gdy6', 1, '', '', 0, '2021-01-15 00:39:54', NULL, '', '', 0, '', '', '', 'web developer', 0),
+(6, 'millaaprillya', 'milla1@gmail.com', '$2b$10$JAmseOGgguw9ZJs.7tYD0.YQXjdY7YRtquIbCy0vb2t4UshzkAm7a', 0, '', '', 0, '2021-01-15 21:30:12', NULL, '', '', 0, '', '', '', '', 0),
+(7, 'companyid.com', 'company2@gmail.com', '$2b$10$1ebj7mex30MszmnSlkWWuO7xxVfSwWVJphxBFhJMkC.7SMumHKHL6', 1, '', '', 0, '2021-01-15 21:31:12', NULL, '', '', 0, '', '', '', 'web developer', 0),
+(8, 'millaaprillya', 'millaaprillya22@gmail.com', '$2b$10$kSZYbmsN86ovBnblOdBu/eUZEjNh49tr5rVH1fWa7iR8/6jnTrzf2', 0, '', '', 0, '2021-01-15 23:02:30', NULL, '', '', 0, '', '', '', '', 0),
+(9, 'millaaprillya', 'millaaprillya2@gmail.com', '$2b$10$W.nS9fSA53vg7.pNAsxZC.q5RqSpcgsqpF2ep13kATCtYjAKWqWc6', 0, '', '', 0, '2021-01-15 23:03:03', NULL, '', '', 0, '', '', '', '', 0),
+(10, 'millaaprillya', 'miliaaprillya22@gmail.com', '$2b$07$Og0WiqNDyfvK02jX5uVG3ewt.xZTpMylzdXZ.s5AxLrhs.Gv2xFj.', 0, '', '', 0, '2021-01-15 23:03:57', '2021-01-16 14:49:33', '', '', 7639, '', '', '', '', 0),
+(11, 'millaaprillya', 'crused06@gmail.com', '$2b$10$ZwTBu2qKGn.sTgCSAPoRN.jsHpaNCWr2ne3D.etOilAjzEv568HdG', 0, '', '', 0, '2021-01-16 00:04:30', '2021-01-15 17:22:12', '', '', 6402, '', '', '', '', 0),
+(12, 'millaaprillya', 'crused066@gmail.com', '$2b$10$nD3cyj/IsLJh67pc2Greb.yXXA7BWMrQW0mPbZgI2DtZRldjyhhcO', 0, 'blank-profile.jpg', '', 0, '2021-01-16 11:25:57', NULL, '', '', 0, '', '', '', '', 0);
+>>>>>>> 81464da99e52e5f73cf1a96a16efcce1656b35cc:kerjain_db (1).sql
 
 --
 -- Indexes for dumped tables
@@ -233,7 +263,7 @@ ALTER TABLE `contact`
 -- AUTO_INCREMENT for table `exp`
 --
 ALTER TABLE `exp`
-  MODIFY `exp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `exp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `portofolio`
@@ -251,7 +281,11 @@ ALTER TABLE `skill`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
+<<<<<<< HEAD:kerjain_db.sql
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+=======
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+>>>>>>> 81464da99e52e5f73cf1a96a16efcce1656b35cc:kerjain_db (1).sql
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

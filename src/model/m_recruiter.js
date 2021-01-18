@@ -4,7 +4,7 @@ module.exports = {
   dataRecruiterModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_role = 0',
+        'SELECT * FROM user WHERE user_role = 1',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -33,6 +33,7 @@ module.exports = {
           delete newResult.user_password
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
@@ -44,7 +45,18 @@ module.exports = {
         'SELECT user_id, user_email, user_password ,user_role FROM user WHERE user_email = ?',
         account,
         (error, result) => {
-          !error ? resolve(result[0].total) : reject(new Error(error))
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getUserByKeyModel: (key) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user WHERE user_key = ?',
+        key,
+        (err, res) => {
+          !err ? resolve(res) : reject(new Error(err))
         }
       )
     })
@@ -59,7 +71,7 @@ module.exports = {
       )
     })
   },
-  settingRecruiterModel: (id, setData) => {
+  settingRecruiterModel: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'UPDATE user SET ? WHERE user_id = ?',
