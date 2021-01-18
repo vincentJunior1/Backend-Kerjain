@@ -23,6 +23,17 @@ module.exports = {
     })
   },
 
+  getFulltimeFreelanceSearchCountModel: (sort, search) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(*) AS totaldata FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND user_job_type='${sort}' AND sub.skills LIKE '%${search}%'`,
+        (error, result) => {
+          !error ? resolve(result[0].totaldata) : reject(new Error(error))
+        }
+      )
+    })
+  },
+
   getTotalDataSearchCount: (search) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -34,6 +45,18 @@ module.exports = {
           } else {
             reject(new Error(error))
           }
+        }
+      )
+    })
+  },
+
+  getSkillCountModel: (search) => {
+    const searching = search === '' ? '' : `AND sub.skills LIKE '%${search}%'`
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(*) AS totaldata FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ${searching}`,
+        (error, result) => {
+          !error ? resolve(result[0].totaldata) : reject(new Error(error))
         }
       )
     })
