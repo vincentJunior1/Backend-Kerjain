@@ -9,8 +9,8 @@ const {
 } = require('../model/m_contact')
 
 const helper = require('../helper/response')
-// const redis = require('redis')
-// const client = redis.createClient()
+const redis = require('redis')
+const client = redis.createClient()
 
 module.exports = {
   postContact: async (req, res) => {
@@ -30,7 +30,6 @@ module.exports = {
         contact_created_at: new Date()
       }
       const result = await postContact(setData)
-
       return helper.response(res, 200, 'Success Post Contact', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -41,7 +40,7 @@ module.exports = {
       const { id } = req.params
       const result = await getContactByIdModel(id)
       if (result.length > 0) {
-        // client.setex(`getcontactbyid:${id}`, 3600, JSON.stringify(result))
+        client.setex(`getcontactbyid:${id}`, 3600, JSON.stringify(result))
         return helper.response(res, 200, 'Success Get Contact By Id', result)
       } else {
         return helper.response(res, 404, `Contact By Id : ${id} Not Found`)
@@ -115,6 +114,7 @@ module.exports = {
     try {
       const result = await getAllContactModel()
       if (result.length > 0) {
+        client.setex('getcontacts', 3600, JSON.stringify(result))
         return helper.response(res, 200, 'Success Get Contact', result)
       } else {
         return helper.response(res, 400, 'No Data')
@@ -127,6 +127,7 @@ module.exports = {
     try {
       const result = await getAllUserContactModel()
       if (result.length > 0) {
+        client.setex('getcontactsuser', 3600, JSON.stringify(result))
         return helper.response(
           res,
           200,

@@ -33,7 +33,7 @@ module.exports = {
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
-        user_img: 'blank-profile.jpg',
+        user_image: 'blank-profile.jpg',
         user_name,
         user_email,
         user_job_type,

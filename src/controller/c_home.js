@@ -29,7 +29,7 @@ module.exports = {
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
       const prevLink =
-        page > 1 ? qs.stringify({ ...req.query, ...{ page: page + 1 } }) : null
+        page > 1 ? qs.stringify({ ...req.query, ...{ page: page - 1 } }) : null
       const nextLink =
         page < totalPage
           ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
@@ -40,8 +40,8 @@ module.exports = {
         totalPage,
         limit,
         totalData,
-        nextLink: nextLink && `http://localhost:3000/home?${nextLink}`,
-        prevLink: prevLink && `http://localhost:3000/home?${prevLink}`
+        nextLink: nextLink && `http://localhost:3000/home/home?${nextLink}`,
+        prevLink: prevLink && `http://localhost:3000/home/home?${prevLink}`
       }
 
       console.log('pageInfo ' + pageInfo.page)
