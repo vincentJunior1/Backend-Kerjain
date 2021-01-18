@@ -8,7 +8,7 @@ const {
   registerUserModel,
   dataAllWorkers,
   dataByIdModel,
-  dataByCheckId,
+  // dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
