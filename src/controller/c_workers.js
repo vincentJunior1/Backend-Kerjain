@@ -8,6 +8,7 @@ const {
   registerUserModel,
   dataAllWorkers,
   dataByIdModel,
+  dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
@@ -216,7 +217,7 @@ module.exports = {
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<p>To Account   ${user_email}</p>
           <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
-          <a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
+          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -274,7 +275,7 @@ module.exports = {
             // new Password
             const salt = bcrypt.genSaltSync(7)
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
-            setData = {
+            const setData = {
               user_password: encryptPassword,
               user_key: 0,
               user_updated_at: new Date()

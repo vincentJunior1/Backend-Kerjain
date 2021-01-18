@@ -32,6 +32,17 @@ module.exports = {
       )
     })
   },
+  dataByCheckId: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user WHERE user_id =?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   registerUserModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO user SET ?', setData, (error, result) => {
@@ -83,6 +94,7 @@ module.exports = {
             }
             resolve(newRes)
           } else {
+            console.log(error)
             reject(new Error(err))
           }
         }
