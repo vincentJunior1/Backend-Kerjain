@@ -4,7 +4,7 @@ module.exports = {
   dataAllWorkers: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT user.user_id,user.*,skill.*,exp.*,contact.* FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id LEFT JOIN contact ON contact.contact_id = user.contact_id WHERE user_role = 0',
+        'SELECT user.user_id ,user.user_name , user.user_email, user.user_role, user.user_image, user.user_description, user.user_status, user.user_jobdesc, user.user_field, user.user_location, user.user_workplace, user.user_about, user.user_job_type, user.user_linkedin, user.user_instagram, user.user_phone, user.user_github, skill.skill_name ,exp.exp_id, exp.exp_position, exp.exp_company, exp.exp_desc, exp.exp_start, exp.exp_end FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id WHERE user_role = 0 GROUP BY user.user_id',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -32,6 +32,17 @@ module.exports = {
       )
     })
   },
+  dataByCheckId: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user WHERE user_id =?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   registerUserModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO user SET ?', setData, (error, result) => {
@@ -43,6 +54,7 @@ module.exports = {
           delete newResult.user_password
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
@@ -83,6 +95,7 @@ module.exports = {
             }
             resolve(newRes)
           } else {
+            console.log(error)
             reject(new Error(err))
           }
         }

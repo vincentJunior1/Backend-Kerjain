@@ -1,8 +1,10 @@
 const {
-  getJobseekerCountModel,
+  // getJobseekerCountModel,
   getFulltimeFreelanceCountModel,
   getJobseekerModel,
-  getTotalDataSearchCount
+  // getTotalDataSearchCount,
+  getFulltimeFreelanceSearchCountModel,
+  getSkillCountModel
 } = require('../model/m_home')
 
 const helper = require('../helper/response')
@@ -17,19 +19,29 @@ module.exports = {
 
       let totalData
 
-      if (sort === 'fulltime' || sort === 'freelance') {
-        totalData = await getFulltimeFreelanceCountModel(sort)
-      } else if (search !== '') {
-        console.log('totalData ' + totalData)
-        totalData = await getTotalDataSearchCount(search)
+      if (sort !== '') {
+        if (search !== '') {
+          if (sort === 'fulltime' || sort === 'freelance') {
+            totalData = await getFulltimeFreelanceSearchCountModel(sort, search)
+          } else {
+            totalData = await getSkillCountModel(search)
+          }
+        } else {
+          if (sort === 'fulltime' || sort === 'freelance') {
+            totalData = await getFulltimeFreelanceCountModel(sort)
+          } else {
+            search = ''
+            totalData = await getSkillCountModel(search)
+          }
+        }
       } else {
-        totalData = await getJobseekerCountModel()
+        totalData = await getSkillCountModel(search)
       }
-      console.log('total Data ' + totalData)
+
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
       const prevLink =
-        page > 1 ? qs.stringify({ ...req.query, ...{ page: page + 1 } }) : null
+        page > 1 ? qs.stringify({ ...req.query, ...{ page: page - 1 } }) : null
       const nextLink =
         page < totalPage
           ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
@@ -40,13 +52,12 @@ module.exports = {
         totalPage,
         limit,
         totalData,
-        nextLink: nextLink && `http://localhost:3000/home?${nextLink}`,
-        prevLink: prevLink && `http://localhost:3000/home?${prevLink}`
+        nextLink: nextLink && `http://localhost:3000/home/home?${nextLink}`,
+        prevLink: prevLink && `http://localhost:3000/home/home?${prevLink}`
       }
 
-      console.log('pageInfo ' + pageInfo.page)
       const result = await getJobseekerModel(limit, offset, sort, search)
-      if (result) {
+      if (result.length > 0) {
         return helper.response(
           res,
           200,
@@ -55,7 +66,11 @@ module.exports = {
           pageInfo
         )
       } else {
-        return helper.response(res, 400, 'Data Not Found')
+        return helper.response(
+          res,
+          400,
+          'Maaf, data yang Anda cari tidak tersedia'
+        )
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)

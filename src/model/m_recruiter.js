@@ -33,6 +33,7 @@ module.exports = {
           delete newResult.user_password
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
@@ -70,7 +71,7 @@ module.exports = {
       )
     })
   },
-  settingRecruiterModel: (id, setData) => {
+  settingRecruiterModel: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'UPDATE user SET ? WHERE user_id = ?',
