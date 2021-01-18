@@ -13,7 +13,6 @@ module.exports = {
         return helper.response(res, 400, error.message)
       } else {
         res.token = result
-        console.log(res.token)
         next()
       }
     })
