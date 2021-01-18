@@ -28,8 +28,12 @@ module.exports = {
       connection.query(
         `SELECT COUNT(sub.user_id) AS total FROM (SELECT user_id FROM skill WHERE skill_name LIKE '%${search}%' group by user_id) sub`,
         (error, result) => {
-          console.log(result)
-          !error ? resolve(result[0].total) : reject(new Error(error))
+          if (!error) {
+            resolve(result[0].total)
+            console.log(result[0].total)
+          } else {
+            reject(new Error(error))
+          }
         }
       )
     })

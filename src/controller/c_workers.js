@@ -2,21 +2,24 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-const fs = require('fs')
+// const fs = require('fs')
 
 const {
   loginCheckModel,
   registerUserModel,
-  dataWorkersModel,
+  dataAllWorkers,
   dataByIdModel,
+  dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
+// const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
+// const { getAllContact } = require('./c_contact')
 
 module.exports = {
   DataWorkers: async (request, response) => {
     try {
-      const result = await dataWorkersModel()
+      const result = await dataAllWorkers()
       return helper.response(response, 200, 'get Data suscces full', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -25,13 +28,25 @@ module.exports = {
   dataById: async (request, response) => {
     try {
       const { id } = request.params
-      const result = await dataByIdModel(id)
-      return helper.response(
-        response,
-        200,
-        'get Data history suscces full',
-        result
-      )
+
+      let result
+      if (id) {
+        result = await dataByIdModel(id)
+        if (result.length === 0) {
+          return helper.response(
+            response,
+            404,
+            `Wokerd By Id : ${id} Not Found`
+          )
+        }
+      } else {
+        result = await dataAllWorkers()
+        if (result.length === 0) {
+          return helper.response(response, 404, 'no data')
+        }
+      }
+
+      return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -89,12 +104,10 @@ module.exports = {
   registerWorkers: async (request, response) => {
     try {
       //   console.log(request.body)
-      // user phone nya ngikut sama table contact
       const { user_name, user_email, user_password } = request.body
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
-        user_image: 'blank-profile.jpg',
         user_name,
         user_email,
         user_password: encryptPassword
@@ -104,6 +117,21 @@ module.exports = {
         return helper.response(response, 400, 'Email has been register :((')
       } else if (request.body.user_email === '') {
         return helper.response(response, 400, 'Insert EMAIL Please :))')
+      } else if (request.body.user_email.search('@') < 1) {
+        return helper.response(
+          response,
+          400,
+          'Email not valid  !!, must be @ s'
+        )
+      } else if (
+        request.body.user_password < 8 ||
+        request.body.user_password > 16
+      ) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8 - 16 characters '
+        )
       } else if (request.body.user_password === '') {
         return helper.response(response, 400, 'Insert Password Please')
       } else if (request.body.user_phone === '') {
@@ -121,29 +149,32 @@ module.exports = {
       console.log(request.body)
       const { id } = request.params
       const {
-        user_image,
-        user_name,
-        user_jobdesc,
-        user_location,
-        user_workplace,
-        user_description
-      } = request.body
-      const setData = {
-        user_image: request.file === undefined ? '' : request.file.filename,
         user_name,
         user_jobdesc,
         user_location,
         user_workplace,
         user_description,
-        user_updated_at: new Date()
-      }
-      const checkUser = await dataByIdModel(id)
-      console.log(checkUser)
-      fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-        if (error) return helper.response(response, 400, 'gagal')
-      })
+        contact_linkedin,
+        contact_phone,
+        contact_instagram,
+        contact_github
+      } = request.body
+
+      const checkUser = await dataByCheckId(id)
       if (checkUser.length > 0) {
-        const result = await settingWorkersModel(id, setData)
+        const setData = {
+          user_name,
+          user_jobdesc,
+          user_location,
+          user_workplace,
+          user_description,
+          contact_linkedin,
+          contact_phone,
+          contact_instagram,
+          contact_github,
+          user_updated_at: new Date()
+        }
+        const result = await settingWorkersModel(setData, id)
         console.log(result)
         return helper.response(response, 200, 'Data updated', result)
       } else {
@@ -238,13 +269,13 @@ module.exports = {
             // new Password
             const salt = bcrypt.genSaltSync(7)
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
-            setData = {
+            const setData = {
               user_password: encryptPassword,
               user_key: 0,
               user_updated_at: new Date()
             }
             await settingWorkersModel(setData, userId)
-            return helper.response(response, 200, 'Passwors Succes change yey')
+            return helper.response(response, 200, 'Password Succes change yey')
           }
         }
       }

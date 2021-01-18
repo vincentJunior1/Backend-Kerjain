@@ -1,21 +1,17 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-  getExpModel: (id) => {
+  getExpModel: () => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        'SELECT * FROM exp WHERE user_id = ? ',
-        id,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error))
-        }
-      )
+      connection.query('SELECT * FROM exp user_id', (error, result) => {
+        !error ? resolve(result) : reject(new Error(error))
+      })
     })
   },
   getByIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM exp WHERE exp_id = ?',
+        'SELECT * FROM exp WHERE user_id = ?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))

@@ -17,7 +17,7 @@ module.exports = {
 
       let totalData
 
-      if (sort === 'fulltime' || sort === 'freelance') {
+      if ((sort === 'fulltime' || sort === 'freelance') && search === '') {
         totalData = await getFulltimeFreelanceCountModel(sort)
       } else if (search !== '') {
         console.log('totalData ' + totalData)

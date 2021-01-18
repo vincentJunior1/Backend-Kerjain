@@ -3,6 +3,7 @@ const uploadImage = require('../middleware/multer_recruiters')
 // const { authRecruiter } = require('../middleware/auth')
 const {
   dataRecruiter,
+  dataById,
   registerRecruiter,
   loginRecruiter,
   forgotPassword,
@@ -12,6 +13,7 @@ const {
 
 // ==> Recruiter <==
 router.get('/', dataRecruiter)
+router.get('/:id', dataById)
 router.post('/register', registerRecruiter)
 router.post('/login', loginRecruiter)
 router.post('/forgot', forgotPassword)

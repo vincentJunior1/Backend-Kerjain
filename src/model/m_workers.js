@@ -1,10 +1,10 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-  Get_dataAllWorkers: () => {
+  dataAllWorkers: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user INNER JOIN contact ON user.user_id = user.user_id INNER JOIN portofolio ON user.user_id = portofolio.user_id INNER JOIN skill ON user.user_id = skill.user_id INNER JOIN exp ON user.user_id = exp.user_id',
+        'SELECT user.user_id,user.*,skill.*,exp.*,contact.* FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id LEFT JOIN contact ON contact.contact_id = user.contact_id WHERE user_role = 0',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -24,7 +24,18 @@ module.exports = {
   dataByIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_id =? ',
+        'SELECT * FROM user WHERE user_id =? AND user_role = 0 ',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  dataByCheckId: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user WHERE user_id =?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
