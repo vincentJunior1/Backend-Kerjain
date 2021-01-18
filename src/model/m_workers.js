@@ -4,7 +4,7 @@ module.exports = {
   dataAllWorkers: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id LEFT JOIN contact ON contact.contact_id = user.contact_id WHERE user_role = 0',
+        'SELECT user.user_id,user.*,skill.*,exp.*,contact.* FROM user LEFT JOIN skill ON skill.user_id = user.user_id LEFT JOIN exp ON exp.user_id = user.user_id LEFT JOIN contact ON contact.contact_id = user.contact_id WHERE user_role = 0',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -24,7 +24,7 @@ module.exports = {
   dataByIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_id =? ',
+        'SELECT * FROM user WHERE user_id =? AND user_role = 0 ',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))

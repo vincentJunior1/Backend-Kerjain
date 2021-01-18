@@ -10,7 +10,13 @@ const {
   forgotPassword,
   resetPassword
 } = require('../controller/c_workers')
-const { getExp, postExp, patchExp, deleteExp } = require('../controller/c_exp')
+const {
+  getAllExpModel,
+  getById,
+  postExp,
+  patchExp,
+  deleteExp
+} = require('../controller/c_exp')
 
 //  ==> Workers <==
 router.get('/', DataWorkers)
@@ -22,7 +28,8 @@ router.patch('/reset', resetPassword)
 router.patch('/:id', uploadImage, settingWorkers)
 
 // ==> exprerience <==
-router.get('/getexprerience/:id', getExp)
+router.get('/getexprerience', getAllExpModel)
+router.get('/getexprerience/:id', getById)
 router.post('/addExp', postExp)
 router.patch('/exprerience/:id', patchExp)
 router.delete('/exprerience/:id', deleteExp)

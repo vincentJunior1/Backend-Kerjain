@@ -20,7 +20,7 @@ module.exports = {
       )
     })
   },
-  getContactByIdModel: (uId) => {
+  getContactByIdModel: (Id) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'SELECT * FROM user LEFT JOIN contact ON contact.contact_id = user.contact_id WHERE user.user_id = ?',

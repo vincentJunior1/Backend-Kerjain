@@ -9,11 +9,19 @@ const {
 } = require('../model/m_exp')
 
 module.exports = {
-  getExp: async (request, response) => {
+  getAllExpModel: async (request, response) => {
+    try {
+      const result = await getExpModel()
+      return helper.response(response, 200, 'get Data suscces full', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getById: async (request, response) => {
     try {
       console.log(request.params)
       const { id } = request.params
-      const result = await getExpModel(id)
+      const result = await getByIdModel(id)
       if (result.length > 0) {
         return helper.response(response, 200, 'Your Experience', result)
       } else {

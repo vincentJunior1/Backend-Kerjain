@@ -7,12 +7,13 @@ const fs = require('fs')
 const {
   loginCheckModel,
   registerUserModel,
-  dataWorkersModel,
   dataAllWorkers,
   dataByIdModel,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
+const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
+const { getAllContact } = require('./c_contact')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -26,13 +27,25 @@ module.exports = {
   dataById: async (request, response) => {
     try {
       const { id } = request.params
-      const result = await dataByIdModel(id)
-      return helper.response(
-        response,
-        200,
-        'get Data history suscces full',
-        result
-      )
+
+      let result
+      if (id) {
+        result = await dataByIdModel(id)
+        if (result.length === 0) {
+          return helper.response(
+            response,
+            404,
+            `Wokerd By Id : ${id} Not Found`
+          )
+        }
+      } else {
+        result = await dataAllWorkers()
+        if (result.length === 0) {
+          return helper.response(response, 404, 'no data')
+        }
+      }
+
+      return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -94,7 +107,6 @@ module.exports = {
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
-        user_image: 'blank-profile.jpg',
         user_name,
         user_email,
         user_password: encryptPassword
@@ -136,12 +148,16 @@ module.exports = {
       console.log(request.body)
       const { id } = request.params
       const {
-        user_image,
         user_name,
         user_jobdesc,
         user_location,
         user_workplace,
         user_description
+      } = request.body
+      const {
+        contact_linkedin,
+        contact_phone,
+        contact_instagram
       } = request.body
       const setData = {
         user_image: request.file === undefined ? '' : request.file.filename,
@@ -152,15 +168,31 @@ module.exports = {
         user_description,
         user_updated_at: new Date()
       }
+      const setData1 = {
+        contact_linkedin,
+        contact_phone,
+        contact_instagram
+      }
+      const checkUserContact = await getContactByIdModel(id)
+      if (!checkUserContact.user_id) {
+        return helper.response(response, 400, 'user Id not found :(')
+      }
       const checkUser = await dataByIdModel(id)
-      console.log(checkUser)
-      fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-        if (error) return helper.response(response, 400, 'gagal')
-      })
+      console.log(checkUser.user_image)
+      // fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
+      //   if (error) return helper.response(response, 400, 'gagal')
+      // })
       if (checkUser.length > 0) {
         const result = await settingWorkersModel(setData, id)
+        const pacthContact = await patchContactModel(setData1, id)
         console.log(result)
-        return helper.response(response, 200, 'Data updated', result)
+        return helper.response(
+          response,
+          200,
+          'Data updated',
+          result,
+          pacthContact
+        )
       } else {
         return helper.response(response, 404, `Data Not Found By Id ${id}`)
       }

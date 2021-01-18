@@ -22,6 +22,32 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
+  dataById: async (request, response) => {
+    try {
+      const { id } = request.params
+
+      let result
+      if (id) {
+        result = await dataByIdModel(id)
+        if (result.length === 0) {
+          return helper.response(
+            response,
+            404,
+            `reqruiment By Id : ${id} Not Found`
+          )
+        }
+      } else {
+        result = await dataRecruiterModel()
+        if (result.length === 0) {
+          return helper.response(response, 404, 'no data')
+        }
+      }
+
+      return helper.response(response, 200, 'Success get data', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
   registerRecruiter: async (request, response) => {
     try {
       const {
@@ -33,7 +59,6 @@ module.exports = {
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
-        user_image: 'blank-profile.jpg',
         user_name,
         user_email,
         user_job_type,
@@ -117,7 +142,6 @@ module.exports = {
       console.log(request.body)
       const { id } = request.params
       const {
-        user_image,
         user_name,
         user_field,
         user_location,
@@ -135,9 +159,12 @@ module.exports = {
       }
       const checkUser = await dataByIdModel(id)
       console.log(checkUser)
-      fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-        if (error) return helper.response(response, 400, 'gagal')
-      })
+      fs.unlink(
+        `uploads/recruiter/${checkUser[0].user_image}`,
+        async (error) => {
+          if (error) return helper.response(response, 400, 'gagal')
+        }
+      )
       if (checkUser.length > 0) {
         const result = await settingRecruiterModel(setData, id)
         return helper.response(response, 200, 'Data updated', result)
@@ -237,7 +264,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingRecruiterModel(setData, userId)
-            return helper.response(response, 200, 'Passwors Succes change yey')
+            return helper.response(response, 200, 'Password Succes change yey')
           }
         }
       }
