@@ -15,6 +15,7 @@ module.exports = {
   sendChatModel: (data) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO chat SET ?', data, (error, result) => {
+        console.log(error)
         if (!error) {
           const newData = {
             ...result.insertId,
@@ -30,9 +31,9 @@ module.exports = {
   getAllRoomchat: (user) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM room_chat LEFT JOIN user ON room_chat.user_id_to = user.user_id WHERE user_id_from = ${user}`,
+        `SELECT * FROM room_chat LEFT JOIN user ON room_chat.user_id_to = user.user_id WHERE user_id_to = ${user} OR user_id_from = ${user} `,
         (error, result) => {
-          console.log(error)
+          console.log('ok')
           !error ? resolve(result) : reject(new Error(error))
         }
       )

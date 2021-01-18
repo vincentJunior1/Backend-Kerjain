@@ -11,11 +11,15 @@ module.exports = {
       const { perpose, email, name, phone, deskripsi, user_id_to } = req.body
       const { user_id } = res.token
       const sendMessage = `halo perkenalkan nama saya ${name} saya ingin menawarkan ${perpose} ${deskripsi} jika anda tertarik dapat menghubungi di ${phone} atau email di ${email}`
-      const roomChat = { room_chat: Math.floor(Math.random() * 9999) }
+      const roomChat = {
+        room_chat: Math.floor(Math.random() * 9999),
+        user_id_from: user_id,
+        user_id_to
+      }
       await createRoomChat(roomChat)
       const data = {
         chat_content: sendMessage,
-        chat_room: roomChat.room_chat,
+        room_chat: roomChat.room_chat,
         user_id_from: user_id,
         user_id_to
       }
@@ -28,7 +32,9 @@ module.exports = {
   getAllChat: async (req, res) => {
     try {
       const { user_id } = res.token
+      console.log(user_id)
       const result = await getAllRoomchat(user_id)
+      console.log(result)
       return helper.response(res, 200, 'Success Get All Data Chat', result)
     } catch (error) {
       return helper.response(res, 404, 'Data Not Found', error)
