@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-const fs = require('fs')
 
 const {
   loginCheckModel,
@@ -12,8 +11,6 @@ const {
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
-const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
-const { getAllContact } = require('./c_contact')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -103,12 +100,22 @@ module.exports = {
   registerWorkers: async (request, response) => {
     try {
       //   console.log(request.body)
-      const { user_name, user_email, user_password } = request.body
+      const {
+        user_name,
+        user_email,
+        user_phone,
+        user_password,
+        confirm_password
+      } = request.body
+      if (user_password !== confirm_password) {
+        return helper.response(response, 400, 'Password  not match')
+      }
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
         user_name,
         user_email,
+        user_phone,
         user_password: encryptPassword
       }
       const checkDataUser = await loginCheckModel(user_email)
@@ -149,50 +156,32 @@ module.exports = {
       const { id } = request.params
       const {
         user_name,
-        user_jobdesc,
-        user_location,
-        user_workplace,
-        user_description
-      } = request.body
-      const {
-        contact_linkedin,
-        contact_phone,
-        contact_instagram
-      } = request.body
-      const setData = {
-        user_image: request.file === undefined ? '' : request.file.filename,
-        user_name,
+        user_job_type,
         user_jobdesc,
         user_location,
         user_workplace,
         user_description,
+        user_linkedin,
+        user_phone,
+        user_instagram
+      } = request.body
+      const setData = {
+        user_name,
+        user_job_type,
+        user_jobdesc,
+        user_location,
+        user_workplace,
+        user_description,
+        user_linkedin,
+        user_phone,
+        user_instagram,
         user_updated_at: new Date()
       }
-      const setData1 = {
-        contact_linkedin,
-        contact_phone,
-        contact_instagram
-      }
-      const checkUserContact = await getContactByIdModel(id)
-      if (!checkUserContact.user_id) {
-        return helper.response(response, 400, 'user Id not found :(')
-      }
       const checkUser = await dataByIdModel(id)
-      console.log(checkUser.user_image)
-      // fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-      //   if (error) return helper.response(response, 400, 'gagal')
-      // })
       if (checkUser.length > 0) {
         const result = await settingWorkersModel(setData, id)
-        const pacthContact = await patchContactModel(setData1, id)
         console.log(result)
-        return helper.response(
-          response,
-          200,
-          'Data updated',
-          result,
-          pacthContact
-        )
+        return helper.response(response, 200, 'Data updated', result)
       } else {
         return helper.response(response, 404, `Data Not Found By Id ${id}`)
       }

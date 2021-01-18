@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-const fs = require('fs')
 
 const {
   registerRequiter,
@@ -53,15 +52,17 @@ module.exports = {
       const {
         user_name,
         user_email,
-        user_job_type,
-        user_password
+        user_password,
+        confirm_password
       } = request.body
+      if (user_password !== confirm_password) {
+        return helper.response(response, 400, 'Password  not match')
+      }
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(user_password, salt)
       const setData = {
         user_name,
         user_email,
-        user_job_type,
         user_role: 1,
         user_password: encryptPassword
       }
@@ -143,28 +144,27 @@ module.exports = {
       const { id } = request.params
       const {
         user_name,
+        user_email,
         user_field,
         user_location,
-        user_workplace,
-        user_description
+        user_description,
+        user_linkedin,
+        user_phone,
+        user_instagram
       } = request.body
       const setData = {
-        user_image: request.file === undefined ? '' : request.file.filename,
         user_name,
+        user_email,
         user_field,
         user_location,
-        user_workplace,
         user_description,
+        user_linkedin,
+        user_phone,
+        user_instagram,
         user_updated_at: new Date()
       }
       const checkUser = await dataByIdModel(id)
       console.log(checkUser)
-      fs.unlink(
-        `uploads/recruiter/${checkUser[0].user_image}`,
-        async (error) => {
-          if (error) return helper.response(response, 400, 'gagal')
-        }
-      )
       if (checkUser.length > 0) {
         const result = await settingRecruiterModel(setData, id)
         return helper.response(response, 200, 'Data updated', result)
@@ -197,7 +197,7 @@ module.exports = {
           }
         })
         const mailOptions = {
-          from: '"Kerjain.com 👻" <junedpembawaberkah@gmail.com>', // sender address
+          from: '"Kerjain.com 👻" <Kerjain@gmail.com>', // sender address
           to: user_email, // list of receivers
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<a href=" http://localhost:8080/forgotpassword/keys=${keys}">Click Here To Change Password</a>`
