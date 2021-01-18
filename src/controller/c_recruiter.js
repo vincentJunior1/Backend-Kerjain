@@ -258,7 +258,7 @@ module.exports = {
             // new Password
             const salt = bcrypt.genSaltSync(7)
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
-            setData = {
+            const setData = {
               user_password: encryptPassword,
               user_key: 0,
               user_updated_at: new Date()

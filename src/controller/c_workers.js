@@ -2,18 +2,19 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const helper = require('../helper/response')
 const jwt = require('jsonwebtoken')
-const fs = require('fs')
+// const fs = require('fs')
 
 const {
   loginCheckModel,
   registerUserModel,
   dataAllWorkers,
   dataByIdModel,
+  dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
-const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
-const { getAllContact } = require('./c_contact')
+// const { getContactByIdModel, patchContactModel } = require('../model/m_contact')
+// const { getAllContact } = require('./c_contact')
 
 module.exports = {
   DataWorkers: async (request, response) => {
@@ -152,47 +153,30 @@ module.exports = {
         user_jobdesc,
         user_location,
         user_workplace,
-        user_description
-      } = request.body
-      const {
-        contact_linkedin,
-        contact_phone,
-        contact_instagram
-      } = request.body
-      const setData = {
-        user_image: request.file === undefined ? '' : request.file.filename,
-        user_name,
-        user_jobdesc,
-        user_location,
-        user_workplace,
         user_description,
-        user_updated_at: new Date()
-      }
-      const setData1 = {
         contact_linkedin,
         contact_phone,
-        contact_instagram
-      }
-      const checkUserContact = await getContactByIdModel(id)
-      if (!checkUserContact.user_id) {
-        return helper.response(response, 400, 'user Id not found :(')
-      }
-      const checkUser = await dataByIdModel(id)
-      console.log(checkUser.user_image)
-      // fs.unlink(`uploads/workers/${checkUser[0].user_image}`, async (error) => {
-      //   if (error) return helper.response(response, 400, 'gagal')
-      // })
+        contact_instagram,
+        contact_github
+      } = request.body
+
+      const checkUser = await dataByCheckId(id)
       if (checkUser.length > 0) {
+        const setData = {
+          user_name,
+          user_jobdesc,
+          user_location,
+          user_workplace,
+          user_description,
+          contact_linkedin,
+          contact_phone,
+          contact_instagram,
+          contact_github,
+          user_updated_at: new Date()
+        }
         const result = await settingWorkersModel(setData, id)
-        const pacthContact = await patchContactModel(setData1, id)
         console.log(result)
-        return helper.response(
-          response,
-          200,
-          'Data updated',
-          result,
-          pacthContact
-        )
+        return helper.response(response, 200, 'Data updated', result)
       } else {
         return helper.response(response, 404, `Data Not Found By Id ${id}`)
       }
@@ -285,7 +269,7 @@ module.exports = {
             // new Password
             const salt = bcrypt.genSaltSync(7)
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
-            setData = {
+            const setData = {
               user_password: encryptPassword,
               user_key: 0,
               user_updated_at: new Date()
