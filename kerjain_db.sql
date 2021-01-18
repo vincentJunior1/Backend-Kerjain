@@ -77,6 +77,15 @@ CREATE TABLE `exp` (
   `exp_updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `exp`
+--
+
+INSERT INTO `exp` (`exp_id`, `user_id`, `exp_position`, `exp_company`, `exp_desc`, `exp_start`, `exp_end`, `exp_created_at`, `exp_updated_at`) VALUES
+(1, 2, 'Berhasil', 'Berhasil', 'Berhasil', '2014-01-20 00:00:00', '2014-05-21 00:00:00', '2021-01-16 08:24:34', '2021-01-16 09:53:03'),
+(2, 2, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:25:18', '0000-00-00 00:00:00'),
+(3, 3, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:35:58', '0000-00-00 00:00:00'),
+(4, 3, 'Web development', 'Company.id', 'abcdefghijkl,', '2014-01-20 00:00:00', '2014-01-20 00:00:00', '2021-01-16 08:36:01', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 
 --
