@@ -7,8 +7,8 @@ module.exports = {
         ? `and user.user_job_type = '${sort}'`
         : ''
     const sortingBy =
-      sort === 'user_name' || sort === 'user_location'
-        ? `order by '${sort}'`
+      sort === 'user.user_name' || sort === 'user_location'
+        ? `order by '${sort}' ASC`
         : ''
     const skill = sort == 'skill' ? ` ORDER BY sub.total_skill DESC` : ''
     const searching = search != null ? `AND sub.skills like '%${search}%'` : ''
@@ -20,7 +20,6 @@ module.exports = {
             resolve(res)
           } else {
             reject(new Error(err))
-            console.log(new Error(err))
           }
         }
       )
