@@ -2,7 +2,9 @@ const {
   getJobseekerCountModel,
   getFulltimeFreelanceCountModel,
   getJobseekerModel,
-  getTotalDataSearchCount
+  getTotalDataSearchCount,
+  getFulltimeFreelanceSearchCountModel,
+  getSkillCountModel
 } = require('../model/m_home')
 
 const helper = require('../helper/response')
@@ -17,15 +19,33 @@ module.exports = {
 
       let totalData
 
-      if ((sort === 'fulltime' || sort === 'freelance') && search === '') {
-        totalData = await getFulltimeFreelanceCountModel(sort)
-      } else if (search !== '') {
-        console.log('totalData ' + totalData)
-        totalData = await getTotalDataSearchCount(search)
+      if (sort !== '') {
+        if (search !== '') {
+          if (sort === 'fulltime' || sort === 'freelance') {
+            totalData = await getFulltimeFreelanceSearchCountModel(sort, search)
+          } else if (sort === 'skill') {
+            totalData = await getSkillCountModel(search)
+          } else {
+            totalData = await getTotalDataSearchCount(search)
+          }
+        } else {
+          if (sort === 'fulltime' || sort === 'freelance') {
+            totalData = await getFulltimeFreelanceCountModel(sort)
+          } else if (sort === 'skill') {
+            search = ''
+            totalData = await getSkillCountModel(search)
+          } else {
+            totalData = await getJobseekerCountModel()
+          }
+        }
       } else {
-        totalData = await getJobseekerCountModel()
+        if (search !== '') {
+          totalData = await getTotalDataSearchCount(search)
+        } else {
+          totalData = await getJobseekerCountModel()
+        }
       }
-      console.log('total Data ' + totalData)
+
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
       const prevLink =
@@ -44,7 +64,6 @@ module.exports = {
         prevLink: prevLink && `http://localhost:3000/home/home?${prevLink}`
       }
 
-      console.log('pageInfo ' + pageInfo.page)
       const result = await getJobseekerModel(limit, offset, sort, search)
       if (result) {
         return helper.response(
