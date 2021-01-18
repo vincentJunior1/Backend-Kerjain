@@ -26,9 +26,9 @@ module.exports = {
   getFulltimeFreelanceSearchCountModel: (sort, search) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM user WHERE user_role=1 AND user_job_type='${sort}' AND skill_name LIKE '%${search}%`,
+        `SELECT COUNT(*) AS totaldata FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND user_job_type='${sort}' AND sub.skills LIKE '%${search}%'`,
         (error, result) => {
-          !error ? resolve(result[0].total) : reject(new Error(error))
+          !error ? resolve(result[0].totaldata) : reject(new Error(error))
         }
       )
     })

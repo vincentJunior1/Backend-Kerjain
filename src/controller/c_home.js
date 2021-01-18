@@ -1,8 +1,8 @@
 const {
-  getJobseekerCountModel,
+  // getJobseekerCountModel,
   getFulltimeFreelanceCountModel,
   getJobseekerModel,
-  getTotalDataSearchCount,
+  // getTotalDataSearchCount,
   getFulltimeFreelanceSearchCountModel,
   getSkillCountModel
 } = require('../model/m_home')
@@ -23,27 +23,19 @@ module.exports = {
         if (search !== '') {
           if (sort === 'fulltime' || sort === 'freelance') {
             totalData = await getFulltimeFreelanceSearchCountModel(sort, search)
-          } else if (sort === 'skill') {
-            totalData = await getSkillCountModel(search)
           } else {
-            totalData = await getTotalDataSearchCount(search)
+            totalData = await getSkillCountModel(search)
           }
         } else {
           if (sort === 'fulltime' || sort === 'freelance') {
             totalData = await getFulltimeFreelanceCountModel(sort)
-          } else if (sort === 'skill') {
+          } else {
             search = ''
             totalData = await getSkillCountModel(search)
-          } else {
-            totalData = await getJobseekerCountModel()
           }
         }
       } else {
-        if (search !== '') {
-          totalData = await getTotalDataSearchCount(search)
-        } else {
-          totalData = await getJobseekerCountModel()
-        }
+        totalData = await getSkillCountModel(search)
       }
 
       const totalPage = Math.ceil(totalData / limit)
@@ -65,7 +57,7 @@ module.exports = {
       }
 
       const result = await getJobseekerModel(limit, offset, sort, search)
-      if (result) {
+      if (result.length > 0) {
         return helper.response(
           res,
           200,
@@ -74,7 +66,11 @@ module.exports = {
           pageInfo
         )
       } else {
-        return helper.response(res, 400, 'Data Not Found')
+        return helper.response(
+          res,
+          400,
+          'Maaf, data yang Anda cari tidak tersedia'
+        )
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
