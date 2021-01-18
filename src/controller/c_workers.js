@@ -81,12 +81,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(
-              response,
-              200,
-              'Succes Login + Pekerja +',
-              result
-            )
+            return helper.response(response, 200, 'Succes Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
