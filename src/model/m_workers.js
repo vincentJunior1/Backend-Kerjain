@@ -86,8 +86,10 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query(
         'UPDATE user SET ? WHERE user_id = ?',
-        setData,
+        [setData, id],
         (error, result) => {
+          console.log(error)
+          console.log(result)
           if (!error) {
             const newResult = {
               user_id: result.insertId,
