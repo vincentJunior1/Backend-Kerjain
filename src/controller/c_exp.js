@@ -3,6 +3,7 @@ const helper = require('../helper/response')
 const {
   getExpModel,
   getByIdModel,
+  getByExpIdModel,
   postExpModel,
   patchExpModel,
   deleteExpModel
@@ -42,7 +43,7 @@ module.exports = {
         exp_start,
         exp_end
       } = request.body
-      setData = {
+      const setData = {
         user_id,
         exp_position,
         exp_company,
@@ -88,7 +89,7 @@ module.exports = {
         exp_end,
         exp_updated_at: new Date()
       }
-      const checkId = await getByIdModel(id)
+      const checkId = await getByExpIdModel(id)
       if (checkId.length > 0) {
         const result = await patchExpModel(id, setData)
         return helper.response(response, 200, 'DataUpdated', result)
