@@ -105,7 +105,6 @@ module.exports = {
         }
         const setData = {
           skill_name,
-          user_id: checkId.skill_id,
           skill_updated_at: new Date()
         }
         const result = await patchSkillModel(setData, id)
