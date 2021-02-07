@@ -8,7 +8,7 @@ const {
   registerUserModel,
   dataAllWorkers,
   dataByIdModel,
-  dataByCheckId,
+  // dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel
 } = require('../model/m_workers')
@@ -51,7 +51,6 @@ module.exports = {
   loginUser: async (request, response) => {
     try {
       const { user_email, user_password } = request.body
-      console.log(request.body)
 
       if (request.body.user_email === '') {
         return helper.response(response, 400, 'Insert email Please :)')
@@ -59,13 +58,11 @@ module.exports = {
         return helper.response(response, 400, 'Insert Password Please :)')
       } else {
         const checkDataUser = await loginCheckModel(user_email)
-        console.log(checkDataUser)
         if (checkDataUser.length > 0) {
           const checkPassword = bcrypt.compareSync(
             user_password,
             checkDataUser[0].user_password
           )
-          console.log(checkPassword)
           if (checkPassword) {
             const {
               user_id,
@@ -95,7 +92,6 @@ module.exports = {
   },
   registerWorkers: async (request, response) => {
     try {
-      //   console.log(request.body)
       const {
         user_name,
         user_email,
@@ -112,6 +108,7 @@ module.exports = {
         user_name,
         user_email,
         user_phone,
+        user_role: 0,
         user_password: encryptPassword
       }
       const checkDataUser = await loginCheckModel(user_email)
@@ -148,7 +145,6 @@ module.exports = {
   },
   settingWorkers: async (request, response) => {
     try {
-      console.log(request.body)
       const { id } = request.params
       const {
         user_name,
@@ -176,7 +172,6 @@ module.exports = {
       const checkUser = await dataByIdModel(id)
       if (checkUser.length > 0) {
         const result = await settingWorkersModel(setData, id)
-        console.log(result)
         return helper.response(response, 200, 'Data updated', result)
       } else {
         return helper.response(response, 404, `Data Not Found By Id ${id}`)
@@ -187,7 +182,6 @@ module.exports = {
   },
   forgotPassword: async (request, response) => {
     try {
-      console.log(request.body)
       const { user_email } = request.body
       const checkDataUser = await loginCheckModel(user_email)
       const keys = Math.round(Math.random() * 10000)
@@ -216,10 +210,8 @@ module.exports = {
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
-            console.log(error)
             return helper.response(response, 400, 'Email not send !')
           } else {
-            console.log(info)
             return helper.response(response, 200, 'Email has been send !')
           }
         })
@@ -232,7 +224,6 @@ module.exports = {
   },
   resetPassword: async (request, response) => {
     try {
-      console.log(request.body)
       const { key, newPassword, confirmPassword } = request.body
       if (newPassword.length < 8 || newPassword.length > 16) {
         return helper.response(
@@ -241,14 +232,9 @@ module.exports = {
           'Password must be 8-16 characters long'
         )
       } else if (newPassword !== confirmPassword) {
-        return helper.response(
-          response,
-          400,
-          `Password didn't match ${newPassword}`
-        )
+        return helper.response(response, 400, "Password didn't match")
       } else {
         const getKeys = await getUserByKeyModel(key)
-        console.log(getKeys)
         if (getKeys.length < 1) {
           return helper.response(response, 400, 'Bad Request')
         } else {

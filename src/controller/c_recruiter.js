@@ -52,6 +52,7 @@ module.exports = {
       const {
         user_name,
         user_email,
+        user_phone,
         user_password,
         confirm_password
       } = request.body
@@ -63,6 +64,7 @@ module.exports = {
       const setData = {
         user_name,
         user_email,
+        user_phone,
         user_role: 1,
         user_password: encryptPassword
       }
@@ -139,7 +141,6 @@ module.exports = {
       const { id } = request.params
       const {
         user_name,
-        user_email,
         user_field,
         user_location,
         user_description,
@@ -149,7 +150,6 @@ module.exports = {
       } = request.body
       const setData = {
         user_name,
-        user_email,
         user_field,
         user_location,
         user_description,
@@ -224,11 +224,7 @@ module.exports = {
           'Password must be 8-16 characters long'
         )
       } else if (newPassword !== confirmPassword) {
-        return helper.response(
-          response,
-          400,
-          `Password didn't match ${newPassword}`
-        )
+        return helper.response(response, 400, "Password didn't match")
       } else {
         const getKeys = await getUserByKeyModel(key)
         console.log(getKeys)
