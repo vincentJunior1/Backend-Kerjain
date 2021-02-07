@@ -232,11 +232,7 @@ module.exports = {
           'Password must be 8-16 characters long'
         )
       } else if (newPassword !== confirmPassword) {
-        return helper.response(
-          response,
-          400,
-          `Password didn't match ${newPassword}`
-        )
+        return helper.response(response, 400, "Password didn't match")
       } else {
         const getKeys = await getUserByKeyModel(key)
         if (getKeys.length < 1) {
