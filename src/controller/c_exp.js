@@ -104,8 +104,13 @@ module.exports = {
     try {
       console.log(request.params)
       const { id } = request.params
-      const result = await deleteExpModel(id)
-      return helper.response(response, 200, 'Succes Delete', result)
+      const check = await getByExpIdModel(id)
+      if (check.length > 0) {
+        const result = await deleteExpModel(id)
+        return helper.response(response, 200, 'Succes Delete', result)
+      } else {
+        return helper.response(response, 400, 'Exprience not found')
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
