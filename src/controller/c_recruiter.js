@@ -141,7 +141,6 @@ module.exports = {
       const { id } = request.params
       const {
         user_name,
-        user_email,
         user_field,
         user_location,
         user_description,
@@ -151,7 +150,6 @@ module.exports = {
       } = request.body
       const setData = {
         user_name,
-        user_email,
         user_field,
         user_location,
         user_description,
