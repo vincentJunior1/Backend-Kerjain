@@ -1,5 +1,5 @@
 <h1 align="center">ExpressJS - #Kerjain.com</h1>
-![Image Banner](https://github.com/vincentJunior1/Backend-Kerjain/tree/development/uploads/future-bg)
+![Image Banner](https://github.com/vincentJunior1/Backend-Kerjain/blob/development/uploads/future-bg/Capture.PNG)
 
 
 ## Built With
