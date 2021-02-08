@@ -29,7 +29,6 @@ module.exports = {
           : ''
       connection.query(
         `select count(*) as total FROM user WHERE user.user_role=1 ${sorting}${sortingBy}`,
-        // `SELECT count(*) as total, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ${sorting}${searching}${sortingBy} `,
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
         }

@@ -21,6 +21,7 @@
     "nodemailer": "^6.4.17",
     "qs": "^6.9.4",
     "redis": "^3.0.2",
+    "socket.io": "^3.1.1",
     "standard": "^16.0.3"
   },
   "devDependencies": {

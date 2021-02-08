@@ -17,7 +17,7 @@ module.exports = {
         if (req.file === undefined) {
           user_image = checkId
         } else {
-          if (checkId !== '') {
+          if (checkId !== '' || checkId !== null) {
             fs.unlink(`uploads/workers/${checkId}`, function (err) {
               if (err) {
                 throw err
