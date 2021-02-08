@@ -155,7 +155,8 @@ module.exports = {
         user_description,
         user_linkedin,
         user_phone,
-        user_instagram
+        user_instagram,
+        user_github
       } = request.body
       const setData = {
         user_name,
@@ -167,6 +168,7 @@ module.exports = {
         user_linkedin,
         user_phone,
         user_instagram,
+        user_github,
         user_updated_at: new Date()
       }
       const checkUser = await dataByIdModel(id)

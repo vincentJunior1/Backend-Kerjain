@@ -3,7 +3,8 @@ const {
   sendChatModel,
   createRoomChat,
   getAllRoomchat,
-  getDetailDataRoomChat
+  getDetailDataRoomChat,
+  getLastMessage
 } = require('../model/m_hiring')
 module.exports = {
   sendJobInvitation: async (req, res) => {
@@ -11,12 +12,19 @@ module.exports = {
       const { perpose, email, name, phone, deskripsi, user_id_to } = req.body
       const { user_id } = res.token
       const sendMessage = `halo perkenalkan nama saya ${name} saya ingin menawarkan ${perpose} ${deskripsi} jika anda tertarik dapat menghubungi di ${phone} atau email di ${email}`
+      const roomNumber = Math.floor(Math.random() * 9999)
       const roomChat = {
-        room_chat: Math.floor(Math.random() * 9999),
+        room_chat: roomNumber,
         user_id_from: user_id,
         user_id_to
       }
       await createRoomChat(roomChat)
+      const roomChats = {
+        room_chat: roomNumber,
+        user_id_to: user_id,
+        user_id_from: user_id_to
+      }
+      await createRoomChat(roomChats)
       const data = {
         chat_content: sendMessage,
         room_chat: roomChat.room_chat,
@@ -32,9 +40,12 @@ module.exports = {
   getAllChat: async (req, res) => {
     try {
       const { user_id } = res.token
-      console.log(user_id)
       const result = await getAllRoomchat(user_id)
-      console.log(result)
+      for (let i = 0; i <= result.length - 1; i++) {
+        let temp = []
+        temp = await getLastMessage(result[i].room_chat)
+        result[i].lastMessage = temp[0].chat_content
+      }
       return helper.response(res, 200, 'Success Get All Data Chat', result)
     } catch (error) {
       return helper.response(res, 404, 'Data Not Found', error)
@@ -45,7 +56,7 @@ module.exports = {
       const { id } = req.params
       const { user_id } = res.token
       console.log(user_id)
-      const result = await getDetailDataRoomChat(id)
+      const result = await getDetailDataRoomChat(id, user_id)
       return helper.response(
         res,
         200,
