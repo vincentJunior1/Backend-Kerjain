@@ -21,6 +21,18 @@ module.exports = {
       )
     })
   },
+  getUserSkill: (id) => {
+    return new Promise((resolve, reject) => {
+      console.log(
+        connection.query(
+          `SELECT * FROM skill WHERE user_id=${id}`,
+          (error, result) => {
+            !error ? resolve(result) : reject(new Error(error))
+          }
+        )
+      )
+    })
+  },
   countSkillModel: (sId) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -55,6 +67,7 @@ module.exports = {
           }
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
