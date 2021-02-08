@@ -31,7 +31,7 @@ module.exports = {
   getAllRoomchat: (user) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM room_chat LEFT JOIN user ON room_chat.user_id_to = user.user_id WHERE user_id_to = ${user} OR user_id_from = ${user} `,
+        `SELECT * FROM room_chat LEFT JOIN user ON room_chat.user_id_to = user.user_id WHERE user_id_from = ${user} `,
         (error, result) => {
           console.log('ok')
           !error ? resolve(result) : reject(new Error(error))
@@ -42,9 +42,19 @@ module.exports = {
   getDetailDataRoomChat: (room, user_id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM chat LEFT JOIN user ON chat.user_id_to = user.user_id WHERE room_chat = ${room} ORDER BY chat_created_at DESC `,
+        `SELECT * FROM chat LEFT JOIN user ON chat.user_id_to = user.user_id WHERE room_chat = ${room} ORDER BY chat_created_at ASC `,
         (error, result) => {
           console.log(error)
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getLastMessage: (roomId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM chat WHERE room_chat = ${roomId} ORDER BY chat_created_at DESC LIMIT 1 `,
+        (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
       )
