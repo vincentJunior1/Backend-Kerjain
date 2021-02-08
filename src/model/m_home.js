@@ -14,7 +14,7 @@ module.exports = {
     const searching = search != null ? `AND sub.skills like '%${search}%'` : ''
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ${skill}${sorting}${searching}${sortingBy} LIMIT ${limit} OFFSET ${offset}`,
+        `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id ${skill}${sorting}${searching}${sortingBy} LIMIT ${limit} OFFSET ${offset}`,
         (err, res) => {
           if (!err) {
             resolve(res)
@@ -28,7 +28,7 @@ module.exports = {
   getJobseekerCountModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM user WHERE user_role=1 AND user_job_type='${sort}'`,
+        `SELECT COUNT(*) AS total FROM user WHERE user_role=0 AND user_job_type='${sort}'`,
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
         }
@@ -39,7 +39,7 @@ module.exports = {
   getFulltimeFreelanceCountModel: (sort) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM user WHERE user_role=1 AND user_job_type='${sort}'`,
+        `SELECT COUNT(*) AS total FROM user WHERE user_role=0 AND user_job_type='${sort}'`,
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
           if (!error) {
@@ -57,7 +57,7 @@ module.exports = {
     const searching = search === '' ? '' : `AND sub.skills LIKE '%${search}%'`
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS totaldata FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ${searching}`,
+        `SELECT COUNT(*) AS totaldata FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id ${searching}`,
         (error, result) => {
           !error ? resolve(result[0].totaldata) : reject(new Error(error))
         }
@@ -80,7 +80,7 @@ module.exports = {
       )
       if (sort === '' && search !== '') {
         connection.query(
-          `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND sub.skills LIKE '%${search}%'`,
+          `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id AND sub.skills LIKE '%${search}%'`,
           (error, result) => {
             !error ? resolve(result) : reject(new Error(error))
           }
@@ -88,21 +88,21 @@ module.exports = {
       } else if (search === '' && sort !== '') {
         if (sort === 'user_name' || sort === 'user_location') {
           connection.query(
-            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ORDER BY ${sort} LIMIT ${limit} OFFSET ${offset}`,
+            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id ORDER BY ${sort} LIMIT ${limit} OFFSET ${offset}`,
             (error, result) => {
               !error ? resolve(result) : reject(new Error(error))
             }
           )
         } else if (sort === 'skill') {
           connection.query(
-            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ORDER BY sub.total_skill DESC LIMIT ${limit} OFFSET ${offset}`,
+            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id ORDER BY sub.total_skill DESC LIMIT ${limit} OFFSET ${offset}`,
             (error, result) => {
               !error ? resolve(result) : reject(new Error(error))
             }
           )
         } else if (sort === 'freelance' || sort === 'fulltime') {
           connection.query(
-            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND user.user_job_type='${sort}' LIMIT ${limit} OFFSET ${offset}`,
+            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id AND user.user_job_type='${sort}' LIMIT ${limit} OFFSET ${offset}`,
             (error, result) => {
               !error ? resolve(result) : reject(new Error(error))
             }
@@ -111,14 +111,14 @@ module.exports = {
       } else if (sort !== '' && search !== '') {
         if (sort === 'freelance' || sort === 'fulltime') {
           connection.query(
-            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND user.user_job_type='${sort}' AND sub.skills LIKE '%${search}%' LIMIT ${limit} OFFSET ${offset}`,
+            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id AND user.user_job_type='${sort}' AND sub.skills LIKE '%${search}%' LIMIT ${limit} OFFSET ${offset}`,
             (error, result) => {
               !error ? resolve(result) : reject(new Error(error))
             }
           )
         } else {
           connection.query(
-            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id AND sub.skills LIKE '%${search}%' LIMIT ${limit} OFFSET ${offset}`,
+            `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id AND sub.skills LIKE '%${search}%' LIMIT ${limit} OFFSET ${offset}`,
             (error, result) => {
               !error ? resolve(result) : reject(new Error(error))
             }
@@ -126,7 +126,7 @@ module.exports = {
         }
       } else {
         connection.query(
-          `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id LIMIT ${limit} OFFSET ${offset}`,
+          `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=0 AND sub.user_id = user.user_id LIMIT ${limit} OFFSET ${offset}`,
           (error, result) => {
             !error ? resolve(result) : reject(new Error(error))
           }

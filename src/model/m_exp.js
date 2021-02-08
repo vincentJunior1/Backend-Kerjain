@@ -19,6 +19,18 @@ module.exports = {
       )
     })
   },
+  getByExpIdModel: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM exp WHERE exp_id = ?',
+        id,
+        (error, result) => {
+          console.log(error)
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   postExpModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO exp SET ?', setData, (error, result) => {
