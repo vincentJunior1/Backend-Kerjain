@@ -33,18 +33,19 @@ const io = socket(server, {
 })
 
 io.on('connection', (socket) => {
-  console.log('socket.io connect')
   socket.on('globalMessage', (data) => {
     io.emit('chatMessage', data)
   })
   socket.on('joinRoom', (data) => {
-    console.log('join' + data)
     socket.join(data)
   })
   socket.on('roomMessage', (data) => {
-    console.log('terkirim')
     console.log(data)
     io.to(data.room_chat).emit('chatMessage', data)
+  })
+  socket.on('changeRoom', (data) => {
+    socket.leave(data.oldRoom)
+    socket.join(data.room_chat)
   })
 })
 
