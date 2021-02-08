@@ -7,6 +7,7 @@ const routesNavigation = require('./src/routesNavigation')
 const morgan = require('morgan')
 app.use(morgan('dev'))
 app.use(express.static('uploads'))
+const socket = require('socket.io')
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -23,12 +24,36 @@ app.use((request, response, next) => {
   next()
 })
 
+const http = require('http')
+const server = http.createServer(app)
+const io = socket(server, {
+  cors: {
+    origin: '*'
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log('socket.io connect')
+  socket.on('globalMessage', (data) => {
+    io.emit('chatMessage', data)
+  })
+  socket.on('joinRoom', (data) => {
+    console.log('join' + data)
+    socket.join(data)
+  })
+  socket.on('roomMessage', (data) => {
+    console.log('terkirim')
+    console.log(data)
+    io.to(data.room_chat).emit('chatMessage', data)
+  })
+})
+
 app.use('/', routesNavigation)
 
 app.get('*', (request, response) => {
   response.status(404).send('Path not found !')
 })
 
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log('Express app is listening on port 3000')
 })
