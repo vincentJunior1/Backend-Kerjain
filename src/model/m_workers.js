@@ -71,13 +71,34 @@ module.exports = {
       )
     })
   },
-  getUserByKeyModel: (key) => {
+  getUserByKeyModel: (keys) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'SELECT * FROM user WHERE user_key = ?',
-        key,
-        (err, res) => {
-          !err ? resolve(res) : reject(new Error(err))
+        keys,
+        (error, result) => {
+          console.log(error)
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  changePassword: (setData, email) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE user SET ? WHERE user_email = ?',
+        [setData, email],
+        (error, result) => {
+          if (!error) {
+            console.log(error)
+            const newResult = {
+              user_email: email,
+              ...setData
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
         }
       )
     })
@@ -88,8 +109,6 @@ module.exports = {
         'UPDATE user SET ? WHERE user_id = ?',
         [setData, id],
         (error, result) => {
-          console.log(error)
-          console.log(result)
           if (!error) {
             const newResult = {
               user_id: result.insertId,

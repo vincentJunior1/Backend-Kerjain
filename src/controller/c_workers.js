@@ -10,14 +10,16 @@ const {
   dataByIdModel,
   // dataByCheckId,
   getUserByKeyModel,
-  settingWorkersModel
+  settingWorkersModel,
+  changePassword
 } = require('../model/m_workers')
+const response = require('../helper/response')
 
 module.exports = {
   DataWorkers: async (request, response) => {
     try {
       const result = await dataAllWorkers()
-      return helper.response(response, 200, 'get Data suscces full', result)
+      return helper.response(response, 200, 'get Data suscces', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -113,9 +115,9 @@ module.exports = {
       }
       const checkDataUser = await loginCheckModel(user_email)
       if (checkDataUser.length >= 1) {
-        return helper.response(response, 400, 'Email has been register :((')
+        return helper.response(response, 400, 'Email has been registered')
       } else if (request.body.user_email === '') {
-        return helper.response(response, 400, 'Insert EMAIL Please :))')
+        return helper.response(response, 400, "Email can't be empty")
       } else if (request.body.user_email.search('@') < 1) {
         return helper.response(
           response,
@@ -268,6 +270,117 @@ module.exports = {
       }
     } catch (error) {
       return helper(response, 400, 'Bad Request', error)
+    }
+  },
+  changePassword: async (request, response) => {
+    try {
+      const { id } = request.params
+      const { newPassword, confirmPassword } = request.body
+      if (newPassword.length < 8 || newPassword.length > 16) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8-16 characters long'
+        )
+      } else if (newPassword !== confirmPassword) {
+        return helper.response(
+          response,
+          400,
+          `Password didn't match ${newPassword}`
+        )
+      } else {
+        const getId = await dataByIdModel(id)
+        const userId = getId[0].user_id
+        console.log(getId)
+        if (userId.length < 1) {
+          return helper.response(response, 400, 'Bad Request')
+        } else {
+          const salt = bcrypt.genSaltSync(7)
+          const encryptPassword = bcrypt.hashSync(newPassword, salt)
+          const setData = {
+            user_password: encryptPassword,
+            user_key: 0,
+            user_updated_at: new Date()
+          }
+          await settingWorkersModel(setData, userId)
+          return helper.response(response, 200, 'Password Success change ')
+        }
+      }
+    } catch (error) {
+      return helper.response(response, 400, ' Bad Request ', error)
+    }
+  },
+  activationEmail: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { user_email } = request.body
+      const keys = Math.round(Math.random() * 100000)
+      const checkDataUser = await loginCheckModel(user_email)
+      if (checkDataUser.length >= 1) {
+        const data = {
+          user_key: keys,
+          user_updated_at: new Date()
+        }
+        await changePassword(data, user_email)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'kostkost169@gmail.com', // generated ethereal user
+            pass: 'admin@123456' // generated ethereal password
+          }
+        })
+        await transporter.sendMail({
+          from: '"Team Kerjain.com"',
+          to: user_email,
+          subject: 'Kerjain.com - Activation Email',
+          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+        }),
+          function (error) {
+            if (error) {
+              return helper.response(response, 400, 'Email not sent !')
+            }
+          }
+        return helper.response(response, 200, 'Email has been sent !')
+      } else {
+        return helper.response(response, 400, 'Email is not registered !')
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  activationUser: async (request, response) => {
+    try {
+      const { keys } = request.body
+      const checkDataUser = await getUserByKeyModel(keys)
+      console.log(checkDataUser)
+      if (
+        request.body === undefined ||
+        request.body === null ||
+        request.body === ''
+      ) {
+        return helper.response(response, 400, 'Invalid Key')
+      }
+      if (checkDataUser.length > 0) {
+        const email = checkDataUser[0].user_email
+        let setData = {
+          user_key: '',
+          user_status: 1,
+          user_updated_at: new Date()
+        }
+        const result = await changePassword(setData, email)
+        return helper.response(
+          response,
+          200,
+          'Success Activate Account',
+          result
+        )
+      } else {
+        return helper.response(response, 400, `Invalid key`)
+      }
+    } catch (error) {
+      return helper.response(response, 404, 'Bad Request', error)
     }
   }
 }

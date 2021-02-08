@@ -8,7 +8,10 @@ const {
   dataById,
   settingWorkers,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  changePassword,
+  activationEmail,
+  activationUser
 } = require('../controller/c_workers')
 const {
   getAllExpModel,
@@ -22,10 +25,13 @@ const {
 router.get('/', DataWorkers)
 router.get('/:id', dataById)
 router.post('/register', registerWorkers)
+router.post('/active/email', activationEmail)
 router.post('/login', loginUser)
 router.post('/forgot', forgotPassword)
 router.patch('/reset', resetPassword)
 router.patch('/:id', uploadImage, settingWorkers)
+router.patch('/newPassword/:id', changePassword)
+router.patch('/activate/email', activationUser)
 
 // ==> exprerience <==
 router.get('/getexprerience', getAllExpModel)
