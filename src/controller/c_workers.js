@@ -8,12 +8,10 @@ const {
   registerUserModel,
   dataAllWorkers,
   dataByIdModel,
-  // dataByCheckId,
   getUserByKeyModel,
   settingWorkersModel,
   changePassword
 } = require('../model/m_workers')
-const response = require('../helper/response')
 
 module.exports = {
   DataWorkers: async (request, response) => {
