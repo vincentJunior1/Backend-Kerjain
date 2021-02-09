@@ -63,11 +63,7 @@ module.exports = {
       const { user_id, porto_name, porto_link, porto_type } = request.body
 
       if (!user_id || !porto_name || !porto_link || !porto_type) {
-        return helper.response(
-          response,
-          400,
-          'please fill all form before post'
-        )
+        return helper.response(response, 400, 'Please fill all column !')
       }
 
       const setData = {
@@ -130,7 +126,7 @@ module.exports = {
 
       const result = await patchPorto(setData, id)
 
-      return helper.response(response, 200, 'Success Update portofolio', result)
+      return helper.response(response, 200, 'Success update portofolio', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }

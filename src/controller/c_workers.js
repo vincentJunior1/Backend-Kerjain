@@ -18,7 +18,7 @@ module.exports = {
   DataWorkers: async (request, response) => {
     try {
       const result = await dataAllWorkers()
-      return helper.response(response, 200, 'get Data suscces', result)
+      return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -81,14 +81,14 @@ module.exports = {
             const result = { ...paylot, token }
             return helper.response(response, 200, 'Succes Login ', result)
           } else {
-            return helper.response(response, 404, 'wrong password !')
+            return helper.response(response, 404, 'Wrong password !')
           }
         } else {
-          return helper.response(response, 404, 'account not register !')
+          return helper.response(response, 404, 'Account not register !')
         }
       }
     } catch (error) {
-      return helper.response(response, 404, 'bad request', error)
+      return helper.response(response, 404, 'Bad request', error)
     }
   },
   registerWorkers: async (request, response) => {
