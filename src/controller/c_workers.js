@@ -351,13 +351,13 @@ module.exports = {
   },
   activationUser: async (request, response) => {
     try {
-      const { keys } = request.body
+      const { keys } = request.params
       const checkDataUser = await getUserByKeyModel(keys)
       console.log(checkDataUser)
       if (
-        request.body === undefined ||
-        request.body === null ||
-        request.body === ''
+        request.params === undefined ||
+        request.params === null ||
+        request.params === ''
       ) {
         return helper.response(response, 400, 'Invalid Key')
       }
