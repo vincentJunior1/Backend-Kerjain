@@ -41,7 +41,6 @@ module.exports = {
           return helper.response(response, 404, 'No data')
         }
       }
-
       return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -87,7 +86,7 @@ module.exports = {
           from: '"Team Kerjain.com"',
           to: user_email,
           subject: 'Kerjain.com - Activation Email',
-          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+          html: `<a href="http://localhost:8080/confirmationemail/${keys}">Click Here To Activate Your Account</a>`
         })
         await registerRequiter(setData)
         return helper.response(
@@ -135,7 +134,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(response, 200, 'Succes Login ', result)
+            return helper.response(response, 200, 'Success Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
@@ -263,7 +262,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingRecruiterModel(setData, userId)
-            return helper.response(response, 200, 'Password Succes change yey')
+            return helper.response(response, 200, 'Success change Password')
           }
         }
       }
