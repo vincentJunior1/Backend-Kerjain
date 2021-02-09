@@ -40,7 +40,7 @@ module.exports = {
       } else {
         result = await dataAllWorkers()
         if (result.length === 0) {
-          return helper.response(response, 404, 'no data')
+          return helper.response(response, 404, 'Data not found')
         }
       }
 
@@ -79,7 +79,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(response, 200, 'Succes Login ', result)
+            return helper.response(response, 200, 'Success Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
@@ -123,7 +123,7 @@ module.exports = {
             port: 465,
             secure: true,
             auth: {
-              user: 'kostkost169@gmail.com', // generated ethereal user
+              user: 'kostkost169@gmail.com',
               pass: 'admin@123456'
             }
           })
@@ -268,7 +268,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingWorkersModel(setData, userId)
-            return helper.response(response, 200, 'Password Succes change yey')
+            return helper.response(response, 200, 'Success change Password ')
           }
         }
       }
@@ -303,7 +303,7 @@ module.exports = {
             user_updated_at: new Date()
           }
           await settingWorkersModel(setData, userId)
-          return helper.response(response, 200, 'Password Success change ')
+          return helper.response(response, 200, 'Success change Password')
         }
       }
     } catch (error) {

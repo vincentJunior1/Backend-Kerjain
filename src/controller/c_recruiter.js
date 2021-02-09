@@ -16,7 +16,7 @@ module.exports = {
   dataRecruiter: async (request, response) => {
     try {
       const result = await dataRecruiterModel()
-      return helper.response(response, 200, 'get Data suscces full', result)
+      return helper.response(response, 200, 'Get Data suscces full', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -41,7 +41,6 @@ module.exports = {
           return helper.response(response, 404, 'no data')
         }
       }
-
       return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -135,7 +134,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(response, 200, 'Succes Login ', result)
+            return helper.response(response, 200, 'Success Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
@@ -263,7 +262,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingRecruiterModel(setData, userId)
-            return helper.response(response, 200, 'Password Succes change yey')
+            return helper.response(response, 200, 'Success change Password')
           }
         }
       }
