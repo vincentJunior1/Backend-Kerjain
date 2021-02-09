@@ -57,37 +57,49 @@ module.exports = {
         confirm_password
       } = request.body
       if (user_password !== confirm_password) {
-        return helper.response(response, 400, 'Password  not match')
+        return helper.response(response, 400, 'Password not match')
       }
-      const salt = bcrypt.genSaltSync(10)
-      const encryptPassword = bcrypt.hashSync(user_password, salt)
-      const setData = {
-        user_name,
-        user_email,
-        user_phone,
-        user_role: 1,
-        user_password: encryptPassword
-      }
-      console.log(setData)
-      const checkDataUser = await loginCheckModel(user_email)
-      if (checkDataUser.length >= 1) {
+      const cekEmail = await loginCheckModel(user_email)
+      console.log(cekEmail)
+      if (cekEmail.length <= 0) {
+        const salt = bcrypt.genSaltSync(10)
+        const encryptPassword = bcrypt.hashSync(user_password, salt)
+        const keys = Math.floor(Math.random() * 9999)
+        const setData = {
+            user_key: keys,
+            user_name,
+            user_email,
+            user_phone,
+            user_role: 1,
+            user_password: encryptPassword
+          },
+          transporter = nodemailer.createTransport({
+            host: 'smtp.google.com',
+            service: 'gmail',
+            port: 465,
+            secure: true,
+            auth: {
+              user: 'kostkost169@gmail.com', // generated ethereal user
+              pass: 'admin@123456'
+            }
+          })
+        await transporter.sendMail({
+          from: '"Team Kerjain.com"',
+          to: user_email,
+          subject: 'Kerjain.com - Activation Email',
+          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+        })
+        await registerRequiter(setData)
         return helper.response(
           response,
-          400,
-          'An existing email company account is registered !!'
+          200,
+          'Success register , check your email'
         )
-      } else if (request.body.user_email === '') {
-        return helper.response(response, 400, 'Please Insert @email')
-      } else if (request.body.user_password === '') {
-        return helper.response(response, 400, 'Insert Password Please')
-      } else if (request.body.user_phone === '') {
-        return helper.response(response, 400, 'Insert your Phone Please')
       } else {
-        const result = await registerRequiter(setData)
-        return helper.response(response, 200, 'ok', result)
+        return helper.response(response, 400, 'Email Already Registred')
       }
     } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
+      return helper.response(response, 400, "Can't Register User", error)
     }
   },
   loginRecruiter: async (request, response) => {
@@ -199,19 +211,15 @@ module.exports = {
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
-            console.log(error)
             return helper.response(response, 400, 'Email not send !')
           } else {
-            console.log(info)
             return helper.response(response, 200, 'Email has been send !')
           }
         })
       } else {
         return helper.response(response, 400, 'Email / Account not Registed !')
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   },
   resetPassword: async (request, response) => {
     try {
