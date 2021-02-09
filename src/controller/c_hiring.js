@@ -4,7 +4,11 @@ const {
   createRoomChat,
   getAllRoomchat,
   getDetailDataRoomChat,
-  getLastMessage
+  getLastMessage,
+  postNotif,
+  getNotifById,
+  countUnreadNotif,
+  patchNotifStatus
 } = require('../model/m_hiring')
 module.exports = {
   sendJobInvitation: async (req, res) => {
@@ -83,6 +87,64 @@ module.exports = {
       return helper.response(res, 200, 'Success Send MEssage', result)
     } catch (error) {
       return helper.response(res, 400, "Can't send Message", error)
+    }
+  },
+  postNotif: async (req, res) => {
+    try {
+      const { notif_to_id, notif_from, notif_purpose } = req.body
+
+      if ((!notif_to_id, !notif_from, !notif_purpose)) {
+        return helper.response(
+          response,
+          400,
+          'please fill all form before sent hiring'
+        )
+      }
+
+      const setData = {
+        notif_to_id,
+        notif_from,
+        notif_purpose
+      }
+
+      console.log(setData)
+
+      const result = await postNotif(setData)
+      return helper.response(res, 200, 'notification sent', result)
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getNotifById: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await getNotifById(id)
+      return helper.response(res, 200, 'Success Get All notification', result)
+    } catch (error) {
+      return helper.response(res, 404, 'Data Not Found', error)
+    }
+  },
+  countUnreadNotif: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await countUnreadNotif(id)
+      return helper.response(res, 200, 'Success count notification', result)
+    } catch (error) {
+      return helper.response(res, 404, 'Data Not Found', error)
+    }
+  },
+  patchNotifStatus: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await patchNotifStatus(id)
+      return helper.response(
+        res,
+        200,
+        'Success patch notification status',
+        result
+      )
+    } catch (error) {
+      return helper.response(res, 404, 'Data Not Found', error)
     }
   }
 }

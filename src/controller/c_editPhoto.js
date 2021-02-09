@@ -34,7 +34,7 @@ module.exports = {
         }
         const result = await edit(setData, id)
         console.log(result)
-        return helper.response(res, 200, 'Success update photo', result)
+        return helper.response(res, 200, 'Success update photo !', result)
       } else {
         if (req.file !== undefined) {
           fs.unlink(`uploads/workers/${req.file.filename}`, function (err) {
