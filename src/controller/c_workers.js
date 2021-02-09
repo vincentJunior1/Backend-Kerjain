@@ -10,8 +10,7 @@ const {
   dataByIdModel,
   getUserByKeyModel,
   settingWorkersModel,
-  changePassword,
-  dataByCheckId
+  changePassword
 } = require('../model/m_workers')
 
 module.exports = {
@@ -40,7 +39,7 @@ module.exports = {
       } else {
         result = await dataAllWorkers()
         if (result.length === 0) {
-          return helper.response(response, 404, 'no data')
+          return helper.response(response, 404, 'Data not found')
         }
       }
 
@@ -79,7 +78,7 @@ module.exports = {
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
-            return helper.response(response, 200, 'Succes Login ', result)
+            return helper.response(response, 200, 'Success Login ', result)
           } else {
             return helper.response(response, 404, 'wrong password !')
           }
@@ -101,7 +100,7 @@ module.exports = {
         confirm_password
       } = request.body
       if (user_password !== confirm_password) {
-        return helper.response(response, 400, 'Password not match')
+        return helper.response(response, 400, 'Password  not match')
       }
       const cekEmail = await loginCheckModel(user_email)
       console.log(cekEmail)
@@ -123,7 +122,7 @@ module.exports = {
             port: 465,
             secure: true,
             auth: {
-              user: 'kostkost169@gmail.com', // generated ethereal user
+              user: 'kostkost169@gmail.com',
               pass: 'admin@123456'
             }
           })
@@ -131,7 +130,7 @@ module.exports = {
           from: '"Team Kerjain.com"',
           to: user_email,
           subject: 'Kerjain.com - Activation Email',
-          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+          html: `<a href="http://localhost:8080/confirmationemail/${keys}">Click Here To Activate Your Account</a>`
         })
         await registerUserModel(setData)
         return helper.response(
@@ -268,7 +267,7 @@ module.exports = {
               user_updated_at: new Date()
             }
             await settingWorkersModel(setData, userId)
-            return helper.response(response, 200, 'Password Succes change yey')
+            return helper.response(response, 200, 'Success change Password ')
           }
         }
       }
@@ -289,7 +288,7 @@ module.exports = {
       } else if (newPassword !== confirmPassword) {
         return helper.response(response, 400, `Password didn't match `)
       } else {
-        const getId = await dataByCheckId(id)
+        const getId = await dataByIdModel(id)
         const userId = getId[0].user_id
         console.log(getId)
         if (userId.length < 1) {
@@ -303,11 +302,51 @@ module.exports = {
             user_updated_at: new Date()
           }
           await settingWorkersModel(setData, userId)
-          return helper.response(response, 200, 'Password Success change ')
+          return helper.response(response, 200, 'Success change Password')
         }
       }
     } catch (error) {
       return helper.response(response, 400, ' Bad Request ', error)
+    }
+  },
+  activationEmail: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { user_email } = request.body
+      const keys = Math.round(Math.random() * 100000)
+      const checkDataUser = await loginCheckModel(user_email)
+      if (checkDataUser.length >= 1) {
+        const data = {
+          user_key: keys,
+          user_updated_at: new Date()
+        }
+        await changePassword(data, user_email)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'kostkost169@gmail.com', // generated ethereal user
+            pass: 'admin@123456' // generated ethereal password
+          }
+        })
+        await transporter.sendMail({
+          from: '"Team Kerjain.com"',
+          to: user_email,
+          subject: 'Kerjain.com - Activation Email',
+          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+        }),
+          function (error) {
+            if (error) {
+              return helper.response(response, 400, 'Email not sent !')
+            }
+          }
+        return helper.response(response, 200, 'Email has been sent !')
+      } else {
+        return helper.response(response, 400, 'Email is not registered !')
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
     }
   },
   activationUser: async (request, response) => {
