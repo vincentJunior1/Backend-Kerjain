@@ -47,14 +47,15 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO user SET ?', setData, (error, result) => {
         if (!error) {
+          console.log(error)
           const newResult = {
             user_id: result.insertId,
             ...setData
           }
+
           delete newResult.user_password
           resolve(newResult)
         } else {
-          console.log(error)
           reject(new Error(error))
         }
       })
