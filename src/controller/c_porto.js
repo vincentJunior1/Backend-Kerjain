@@ -61,6 +61,15 @@ module.exports = {
   postPorto: async (request, response) => {
     try {
       const { user_id, porto_name, porto_link, porto_type } = request.body
+
+      if (!user_id || !porto_name || !porto_link || !porto_type) {
+        return helper.response(
+          response,
+          400,
+          'please fill all form before post'
+        )
+      }
+
       const setData = {
         user_id,
         porto_name,
