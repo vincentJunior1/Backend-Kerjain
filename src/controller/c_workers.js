@@ -130,7 +130,7 @@ module.exports = {
           from: '"Team Kerjain.com"',
           to: user_email,
           subject: 'Kerjain.com - Activation Email',
-          html: `<a href="http://localhost:3000/activate?keys=${keys}">Click Here To Activate Your Account</a>`
+          html: `<a href="http://localhost:8080/confirmationemail/${keys}">Click Here To Activate Your Account</a>`
         })
         await registerUserModel(setData)
         return helper.response(
