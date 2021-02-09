@@ -10,7 +10,6 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
-  activationEmail,
   activationUser
 } = require('../controller/c_workers')
 const {
@@ -25,7 +24,6 @@ const {
 router.get('/', DataWorkers)
 router.get('/:id', dataById)
 router.post('/register', registerWorkers)
-router.post('/active/email', activationEmail)
 router.post('/login', loginUser)
 router.post('/forgot', forgotPassword)
 router.patch('/reset', resetPassword)
