@@ -87,7 +87,7 @@ module.exports = {
         console.log(generate)
         result.push(generate)
       }
-      return helper.response(res, 200, 'Success Post Skills', result)
+      return helper.response(res, 200, 'Success post skill', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

@@ -16,7 +16,7 @@ module.exports = {
   dataRecruiter: async (request, response) => {
     try {
       const result = await dataRecruiterModel()
-      return helper.response(response, 200, 'Get Data suscces full', result)
+      return helper.response(response, 200, 'Success get data', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -32,13 +32,13 @@ module.exports = {
           return helper.response(
             response,
             404,
-            `reqruiment By Id : ${id} Not Found`
+            `Reqruiment By Id : ${id} Not Found`
           )
         }
       } else {
         result = await dataRecruiterModel()
         if (result.length === 0) {
-          return helper.response(response, 404, 'no data')
+          return helper.response(response, 404, 'No data')
         }
       }
       return helper.response(response, 200, 'Success get data', result)

@@ -53,18 +53,23 @@ module.exports = {
         exp_created_at: new Date()
       }
       if (setData.exp_position === '') {
-        return helper.response(response, 400, 'Colom cannot be empty')
+        return helper.response(response, 400, 'Column cannot be empty')
       } else if (setData.exp_company === '') {
-        return helper.response(response, 400, 'Colom cannot be empty')
+        return helper.response(response, 400, 'Column cannot be empty')
       } else if (setData.exp_desc === '') {
-        return helper.response(response, 400, 'Colom cannot be empty')
+        return helper.response(response, 400, 'Column cannot be empty')
       } else if (setData.exp_start === '') {
-        return helper.response(response, 400, 'Colom cannot be empty')
+        return helper.response(response, 400, 'Column cannot be empty')
       } else if (setData.exp_end === '') {
-        return helper.response(response, 400, 'Colom cannot be empty')
+        return helper.response(response, 400, 'Column cannot be empty')
       } else {
         const result = await postExpModel(setData)
-        return helper.response(response, 200, 'Success ++ add ', result)
+        return helper.response(
+          response,
+          200,
+          'Success add experience !',
+          result
+        )
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad request', error)
@@ -92,7 +97,7 @@ module.exports = {
       const checkId = await getByExpIdModel(id)
       if (checkId.length > 0) {
         const result = await patchExpModel(id, setData)
-        return helper.response(response, 200, 'DataUpdated', result)
+        return helper.response(response, 200, 'Data Updated', result)
       } else {
         return helper.response(response, 404, `Data Not Found By Id ${id}`)
       }
@@ -107,7 +112,12 @@ module.exports = {
       const check = await getByExpIdModel(id)
       if (check.length > 0) {
         const result = await deleteExpModel(id)
-        return helper.response(response, 200, 'Succes Delete', result)
+        return helper.response(
+          response,
+          200,
+          'Succes delete experience',
+          result
+        )
       } else {
         return helper.response(response, 400, 'Exprience not found')
       }
