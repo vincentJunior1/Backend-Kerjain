@@ -29,7 +29,7 @@ router.post('/forgot', forgotPassword)
 router.patch('/reset', resetPassword)
 router.patch('/:id', uploadImage, settingWorkers)
 router.patch('/newPassword/:id', changePassword)
-router.patch('/activate/email', activationUser)
+router.patch('/activate/email/:keys', activationUser)
 
 // ==> exprerience <==
 router.get('/getexprerience', getAllExpModel)
