@@ -9,10 +9,11 @@ module.exports = {
         : ''
     const sortingBy =
       sort === 'user.user_name' || sort === 'user_location'
-        ? `order by '${sort}' ASC`
+        ? `order by ${sort} ASC`
         : ''
     const skill = sort === 'skill' ? ` ORDER BY sub.total_skill DESC` : ''
-    const searching = search !== '' ? ` AND sub.skills like '%${search}%'` : ''
+    const searching =
+      search !== undefined ? ` AND sub.skills like '%${search}%'` : ''
     return actionQuery(
       `SELECT *, sub.total_skill, sub.skills FROM user, (SELECT skill.user_id, GROUP_CONCAT(DISTINCT(skill.skill_name)) AS skills, COUNT(*) AS total_skill FROM skill GROUP BY skill.user_id) sub WHERE user.user_role=1 AND sub.user_id = user.user_id ${skill}${sorting}${searching}${sortingBy} LIMIT ${limit} OFFSET ${offset}`
     )
