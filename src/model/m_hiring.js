@@ -59,5 +59,57 @@ module.exports = {
         }
       )
     })
+  },
+  postNotif: (data) => {
+    console.log(data)
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'INSERT INTO notification SET ?',
+        data,
+        (error, result) => {
+          console.log(error)
+          if (!error) {
+            const newData = {
+              ...result.insertId,
+              ...data
+            }
+            resolve(newData)
+          } else {
+            console.log(error)
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
+  getNotifById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM notification WHERE notif_to_id = ${id} `,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  countUnreadNotif: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(*) AS total FROM notification WHERE notif_to_id = ${id} AND notif_status = 0 `,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  patchNotifStatus: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE notification SET notif_status = 1 WHERE notif_to_id = ${id} AND notif_status = 0`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
   }
 }
