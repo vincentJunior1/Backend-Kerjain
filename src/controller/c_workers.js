@@ -353,7 +353,6 @@ module.exports = {
     try {
       const { keys } = request.params
       const checkDataUser = await getUserByKeyModel(keys)
-      console.log(checkDataUser)
       if (
         request.params === undefined ||
         request.params === null ||
@@ -364,7 +363,7 @@ module.exports = {
       if (checkDataUser.length > 0) {
         const email = checkDataUser[0].user_email
         let setData = {
-          user_key: '',
+          user_key: 0,
           user_status: 1,
           user_updated_at: new Date()
         }
@@ -379,6 +378,7 @@ module.exports = {
         return helper.response(response, 400, `Invalid key`)
       }
     } catch (error) {
+      console.log(error)
       return helper.response(response, 404, 'Bad Request', error)
     }
   }

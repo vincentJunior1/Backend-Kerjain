@@ -38,6 +38,7 @@ module.exports = {
       const result = await sendChatModel(data)
       return helper.response(res, 200, 'Success Send Invitation', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, "Can't Send Message", error)
     }
   },
@@ -45,13 +46,16 @@ module.exports = {
     try {
       const { user_id } = res.token
       const result = await getAllRoomchat(user_id)
+      console.log(result)
       for (let i = 0; i <= result.length - 1; i++) {
         let temp = []
         temp = await getLastMessage(result[i].room_chat)
         result[i].lastMessage = temp[0].chat_content
+        console.log(temp)
       }
       return helper.response(res, 200, 'Success Get All Data Chat', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 404, 'Data Not Found', error)
     }
   },

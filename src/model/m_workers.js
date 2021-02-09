@@ -24,7 +24,7 @@ module.exports = {
   dataByIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_id =? AND user_role = 0 ',
+        'SELECT * FROM user WHERE user_id =?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -78,7 +78,6 @@ module.exports = {
         'SELECT * FROM user WHERE user_key = ?',
         keys,
         (error, result) => {
-          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )
