@@ -25,7 +25,6 @@ module.exports = {
         'SELECT * FROM exp WHERE exp_id = ?',
         id,
         (error, result) => {
-          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )
@@ -60,7 +59,6 @@ module.exports = {
             }
             resolve(newResult)
           } else {
-            console.log(error)
             reject(new Error(error))
           }
         }

@@ -20,7 +20,6 @@ module.exports = {
   },
   getById: async (request, response) => {
     try {
-      console.log(request.params)
       const { id } = request.params
       const result = await getByIdModel(id)
       if (result.length > 0) {
@@ -33,7 +32,6 @@ module.exports = {
     }
   },
   postExp: async (request, response) => {
-    console.log(request.body)
     try {
       const {
         user_id,
@@ -77,7 +75,6 @@ module.exports = {
   },
   patchExp: async (request, response) => {
     const { id } = request.params
-    console.log(request.params)
     try {
       const {
         exp_position,
@@ -107,7 +104,6 @@ module.exports = {
   },
   deleteExp: async (request, response) => {
     try {
-      console.log(request.params)
       const { id } = request.params
       const check = await getByExpIdModel(id)
       if (check.length > 0) {

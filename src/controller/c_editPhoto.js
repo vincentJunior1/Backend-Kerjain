@@ -6,14 +6,11 @@ const fs = require('fs')
 module.exports = {
   editPhoto: async (req, res) => {
     try {
-      console.log('masuk')
       const { user_id } = res.token
       const countId = await getCountId(user_id)
-      console.log(countId)
       let user_image
       if (countId > 0) {
         const checkId = await getImageById(user_id)
-        console.log(checkId)
         if (req.file === undefined) {
           user_image = checkId
         } else {
@@ -33,7 +30,6 @@ module.exports = {
           user_updated_at: new Date()
         }
         const result = await edit(setData, user_id)
-        console.log(result)
         return helper.response(res, 200, 'Success update photo !', result)
       } else {
         if (req.file !== undefined) {

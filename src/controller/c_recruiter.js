@@ -59,7 +59,6 @@ module.exports = {
         return helper.response(response, 400, 'Password not match')
       }
       const cekEmail = await loginCheckModel(user_email)
-      console.log(cekEmail)
       if (cekEmail.length <= 0) {
         const salt = bcrypt.genSaltSync(10)
         const encryptPassword = bcrypt.hashSync(user_password, salt)
@@ -104,7 +103,6 @@ module.exports = {
   loginRecruiter: async (request, response) => {
     try {
       const { user_email, user_password } = request.body
-      console.log(request.body)
 
       if (request.body.user_email === '') {
         return helper.response(response, 400, 'Insert email Please :)')
@@ -112,13 +110,11 @@ module.exports = {
         return helper.response(response, 400, 'Insert Password Please :)')
       } else {
         const checkDataUser = await loginCheckModel(user_email)
-        console.log(checkDataUser)
         if (checkDataUser.length > 0) {
           const checkPassword = bcrypt.compareSync(
             user_password,
             checkDataUser[0].user_password
           )
-          console.log(checkPassword)
           if (checkPassword) {
             const {
               user_id,
@@ -148,7 +144,6 @@ module.exports = {
   },
   settingRecruiter: async (request, response) => {
     try {
-      console.log(request.body)
       const { id } = request.params
       const {
         user_name,
@@ -170,7 +165,6 @@ module.exports = {
         user_updated_at: new Date()
       }
       const checkUser = await dataByIdModel(id)
-      console.log(checkUser)
       if (checkUser.length > 0) {
         const result = await settingRecruiterModel(setData, id)
         return helper.response(response, 200, 'Data updated', result)
@@ -183,7 +177,6 @@ module.exports = {
   },
   forgotPassword: async (request, response) => {
     try {
-      console.log(request.body)
       const { user_email } = request.body
       const checkDataUser = await loginCheckModel(user_email)
       const keys = Math.round(Math.random() * 10000)
@@ -222,7 +215,6 @@ module.exports = {
   },
   resetPassword: async (request, response) => {
     try {
-      console.log(request.body)
       const { key, newPassword, confirmPassword } = request.body
       if (newPassword.length < 8 || newPassword.length > 16) {
         return helper.response(
@@ -234,7 +226,6 @@ module.exports = {
         return helper.response(response, 400, "Password didn't match")
       } else {
         const getKeys = await getUserByKeyModel(key)
-        console.log(getKeys)
         if (getKeys.length < 1) {
           return helper.response(response, 400, 'Bad Request')
         } else {

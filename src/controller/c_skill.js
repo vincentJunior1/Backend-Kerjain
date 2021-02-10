@@ -73,7 +73,6 @@ module.exports = {
     try {
       let generate
       const result = []
-      console.log(req.body)
       for (let i = 0; i < req.body.length; i++) {
         const { user_id, skill_name } = req.body[i]
 
@@ -82,9 +81,7 @@ module.exports = {
           skill_name,
           skill_created_at: new Date()
         }
-        console.log(setData)
         generate = await postSkillModel(setData)
-        console.log(generate)
         result.push(generate)
       }
       return helper.response(res, 200, 'Success post skill', result)
@@ -98,7 +95,6 @@ module.exports = {
       let { skill_name } = req.body
       const countId = await countSkillModel(id)
       const checkId = await getSkillByIdSkillModel(id)
-      console.log(checkId)
       if (countId > 0) {
         if (skill_name === '') {
           skill_name = checkId.skill_name

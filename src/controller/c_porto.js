@@ -133,7 +133,6 @@ module.exports = {
   },
   deletePorto: async (request, response) => {
     try {
-      console.log('masuk kontroller')
       const { id } = request.params
 
       const porto = await getPortoById(id)

@@ -103,7 +103,6 @@ module.exports = {
         return helper.response(response, 400, 'Password  not match')
       }
       const cekEmail = await loginCheckModel(user_email)
-      console.log(cekEmail)
       if (cekEmail.length <= 0) {
         const salt = bcrypt.genSaltSync(10)
         const encryptPassword = bcrypt.hashSync(user_password, salt)
@@ -286,11 +285,10 @@ module.exports = {
           'Password must be 8-16 characters long'
         )
       } else if (newPassword !== confirmPassword) {
-        return helper.response(response, 400, `Password didn't match `)
+        return helper.response(response, 400, "Password didn't match")
       } else {
         const getId = await dataByIdModel(id)
         const userId = getId[0].user_id
-        console.log(getId)
         if (userId.length < 1) {
           return helper.response(response, 400, 'Bad Request')
         } else {
@@ -311,7 +309,6 @@ module.exports = {
   },
   activationEmail: async (request, response) => {
     try {
-      console.log(request.body)
       const { user_email } = request.body
       const keys = Math.round(Math.random() * 100000)
       const checkDataUser = await loginCheckModel(user_email)
@@ -375,10 +372,9 @@ module.exports = {
           result
         )
       } else {
-        return helper.response(response, 400, `Invalid key`)
+        return helper.response(response, 400, 'Invalid key')
       }
     } catch (error) {
-      console.log(error)
       return helper.response(response, 404, 'Bad Request', error)
     }
   }

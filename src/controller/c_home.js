@@ -31,7 +31,6 @@ module.exports = {
       const result = await get(limit, offset, sort, search)
       return response(res, 200, 'Success get data', result, pageInfo)
     } catch (error) {
-      console.log(error)
       return response(res, 400, 'Bad Request', error)
     }
   }

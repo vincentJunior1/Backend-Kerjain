@@ -23,13 +23,11 @@ module.exports = {
   },
   getUserSkill: (id) => {
     return new Promise((resolve, reject) => {
-      console.log(
-        connection.query(
-          `SELECT * FROM skill WHERE user_id=${id}`,
-          (error, result) => {
-            !error ? resolve(result) : reject(new Error(error))
-          }
-        )
+      connection.query(
+        `SELECT * FROM skill WHERE user_id=${id}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
       )
     })
   },
@@ -48,8 +46,6 @@ module.exports = {
       connection.query(
         'SELECT skill_id, user_id, GROUP_CONCAT(skill_name) AS skills, skill_created_at, skill_updated_at FROM skill GROUP BY user_id',
         (error, result) => {
-          console.log('ini result')
-          console.log(result)
           !error ? resolve(result) : reject(new Error(error))
         }
       )
@@ -58,8 +54,6 @@ module.exports = {
   postSkillModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO skill SET ?', setData, (error, result) => {
-        console.log(setData)
-        console.log(result)
         if (!error) {
           const newResult = {
             skill_id: result.insertId,
@@ -67,7 +61,6 @@ module.exports = {
           }
           resolve(newResult)
         } else {
-          console.log(error)
           reject(new Error(error))
         }
       })
@@ -79,7 +72,6 @@ module.exports = {
         ' UPDATE skill SET ? WHERE skill_id= ?',
         [setData, sId],
         (error, result) => {
-          console.log(result)
           if (!error) {
             const newResult = {
               skill_id: sId,

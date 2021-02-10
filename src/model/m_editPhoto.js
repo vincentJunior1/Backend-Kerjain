@@ -30,7 +30,6 @@ module.exports = {
         [setData, id],
         (error, result) => {
           if (!error) {
-            console.log(result)
             resolve(result)
           } else {
             reject(new Error(error))

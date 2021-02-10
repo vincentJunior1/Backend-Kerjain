@@ -47,7 +47,6 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO user SET ?', setData, (error, result) => {
         if (!error) {
-          console.log(error)
           const newResult = {
             user_id: result.insertId,
             ...setData
@@ -90,7 +89,6 @@ module.exports = {
         [setData, email],
         (error, result) => {
           if (!error) {
-            console.log(error)
             const newResult = {
               user_email: email,
               ...setData

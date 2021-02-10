@@ -6,7 +6,6 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/workers')
   },
   filename: function (req, file, cb) {
-    console.log(file)
     cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
   }
 })
@@ -28,17 +27,11 @@ const upload = multer({
 
 const uploadFilter = (request, response, next) => {
   upload(request, response, function (err) {
-    console.log(err)
     if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
       return helper.response(response, 400, err.message)
-      // } else if (err.code === 'LIMIT_FILE_SIZE') {
-      //   return helper.response(response, 400, 'kegedean boi')
     } else if (err) {
-      // An unknown error occurred when uploading.
       return helper.response(response, 400, err.message)
     }
-    // everything is fine
     next()
   })
 }

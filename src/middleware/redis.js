@@ -7,7 +7,6 @@ module.exports = {
     const { id } = req.params
     client.get(`getskillperuser:${id}`, (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -15,7 +14,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
@@ -23,7 +21,6 @@ module.exports = {
   getAllSkillAllUserRedis: (req, res, next) => {
     client.get('getskills', (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -31,7 +28,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
@@ -50,7 +46,6 @@ module.exports = {
     const { id } = req.params
     client.get(`getcontactbyid:${id}`, (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -58,7 +53,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
@@ -66,7 +60,6 @@ module.exports = {
   getAllContactRedis: (req, res, next) => {
     client.get('getcontacts', (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -74,7 +67,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
@@ -82,7 +74,6 @@ module.exports = {
   getAllUserContactRedis: (req, res, next) => {
     client.get('getcontactsuser', (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -90,7 +81,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
@@ -108,7 +98,6 @@ module.exports = {
   getJobseekerRedis: (req, res, next) => {
     client.get(`gethome:${JSON.stringify(req.query)}`, (error, result) => {
       if (!error && result !== null) {
-        console.log('Data is in Redis')
         return helper.response(
           res,
           200,
@@ -116,7 +105,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log("Data isn't in Redis")
         next()
       }
     })
