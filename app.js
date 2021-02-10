@@ -29,7 +29,8 @@ const server = http.createServer(app)
 const io = socket(server, {
   cors: {
     origin: '*'
-  }
+  },
+  path: '/apikerjain/socket.io'
 })
 
 io.on('connection', (socket) => {
@@ -49,7 +50,7 @@ io.on('connection', (socket) => {
   })
 })
 
-app.use('/', routesNavigation)
+app.use('/apikerjain', routesNavigation)
 
 app.get('*', (request, response) => {
   response.status(404).send('Path not found !')
