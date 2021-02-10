@@ -97,6 +97,7 @@ module.exports = {
         return helper.response(response, 400, 'Email Already Registred')
       }
     } catch (error) {
+      console.log(error)
       return helper.response(response, 400, "Can't Register User", error)
     }
   },
