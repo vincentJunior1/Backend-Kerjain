@@ -6,7 +6,7 @@ const routesNavigation = require('./src/routesNavigation')
 
 const morgan = require('morgan')
 app.use(morgan('dev'))
-app.use(express.static('uploads'))
+app.use('/apikerjain/fileUploadsApiKerjain', express.static('uploads'))
 const socket = require('socket.io')
 
 const bodyParser = require('body-parser')
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
   })
 })
 
-app.use('/', routesNavigation)
+app.use('/apikerjain', routesNavigation)
 
 app.get('*', (request, response) => {
   response.status(404).send('Path not found !')
