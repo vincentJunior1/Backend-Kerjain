@@ -29,7 +29,8 @@ const server = http.createServer(app)
 const io = socket(server, {
   cors: {
     origin: '*'
-  }
+  },
+  path: '/apikerjain/socket.io'
 })
 
 io.on('connection', (socket) => {
