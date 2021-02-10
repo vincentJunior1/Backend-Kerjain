@@ -34,17 +34,20 @@ const io = socket(server, {
 })
 
 io.on('connection', (socket) => {
+  console.log('masuk connection')
   socket.on('globalMessage', (data) => {
     io.emit('chatMessage', data)
   })
   socket.on('joinRoom', (data) => {
-    socket.join(data)
+    console.log(data)
+    console.log('vincent syahadat')
+    socket.join(data.room)
   })
   socket.on('roomMessage', (data) => {
-    console.log(data)
     io.to(data.room_chat).emit('chatMessage', data)
   })
   socket.on('changeRoom', (data) => {
+    console.log(data)
     socket.leave(data.oldRoom)
     socket.join(data.room_chat)
   })
