@@ -38,7 +38,7 @@ DB_PASS= //Database Password
 DB_DATABASE=kerjaindb //Database Name
 ```
 
-## License Contributors Team Terbang.in
+## License Contributors Team Kerjain
 
 © [Rizqon Maulana](https://github.com/rizqonmaulana) <br />
 © [Ivan Rozak](https://github.com/ivanrozak) <br />
