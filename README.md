@@ -1,6 +1,7 @@
-<h1 align="center">ExpressJS - #Kerjain.com</h1>
-(https://github.com/vincentJunior1/Backend-Kerjain/blob/development/uploads/future-bg/Capture.PNG)
+<h1 align="center">ExpressJS - Kerjain RESTfull API</h1>
 
+This project is created for requirement in completing Arkademy FullStack Web Developer Bootcamp.
+This website allow users to search and find best talent, interact company with workers via chat, get hire notification and status, and many more.. [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
@@ -23,18 +24,25 @@
 5. Create a database with the name #nama_database, and Import file sql to **phpmyadmin**
 6. Open Postman desktop application or Chrome web app extension that has installed before
 7. Choose HTTP Method and enter request url.(ex. localhost:3000/)
-8. You can see all the end point [here](https://documenter.getpostman.com/view/9852901/TVmS8Fce)
+8. You can see all the end point [here](https://documenter.getpostman.com/view/8213807/TW77gPHA)
 
 ## Set up .env file
 
 Open .env file on your favorite code editor, and copy paste this code below :
 
 ```
-DB_HOST=localhost // Database host
-DB_HOST=localhost
-DB_USER=root
-DB_DATABASE=kerjain_db
+PORT=3000 //Port where express is running
+DB_HOST=localhost //Database Host
+DB_USER=root //Database User
+DB_PASS= //Database Password
+DB_DATABASE=kerjaindb //Database Name
+```
 
-## License
+## License Contributors Team Kerjain
 
-© team kerjain.com
+© [Rizqon Maulana](https://github.com/rizqonmaulana) <br />
+© [Ivan Rozak](https://github.com/ivanrozak) <br />
+© [Anka Abdullah](https://github.com/Anka-Abdullah) <br />
+© [Vincent Junior](https://github.com/vincentJunior1) <br />
+© [Risky Amalia](https://github.com/riskyamaliaharis) <br />
+© [Milla Aprilia](https://github.com/millaaprillya)
