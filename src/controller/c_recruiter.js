@@ -77,8 +77,8 @@ module.exports = {
             port: 465,
             secure: true,
             auth: {
-              user: 'kostkost169@gmail.com', // generated ethereal user
-              pass: 'admin@123456'
+              user: 'skyrouterweb6@gmail.com', // generated ethereal user
+              pass: 'skyrouter6'
             }
           })
         await transporter.sendMail({
@@ -191,8 +191,8 @@ module.exports = {
           port: 587,
           secure: false, // true for 465, false for other ports
           auth: {
-            user: 'kostkost169@gmail.com', // generated ethereal user
-            pass: 'admin@123456' // generated ethereal password
+            user: 'skyrouterweb6@gmail.com', // generated ethereal user
+            pass: 'skyrouter6' // generated ethereal password
           }
         })
         const mailOptions = {
