@@ -129,7 +129,7 @@ module.exports = {
           from: '"Team Kerjain.com"',
           to: user_email,
           subject: 'Kerjain.com - Activation Email',
-          html: `<a href="http://localhost:8080/confirmationemail/${keys}">Click Here To Activate Your Account</a>`
+          html: `<a href="${process.env.URL_BE}confirmationemail/${keys}">Click Here To Activate Your Account</a>`
         })
         await registerUserModel(setData)
         return helper.response(
@@ -210,7 +210,7 @@ module.exports = {
           subject: 'Kerjain.com - Forgot Password', // Subject line
           html: `<p>To Account   ${user_email}</p>
           <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
-          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+          <a href=" ${process.env.URL_FE}confirmpassword/${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {

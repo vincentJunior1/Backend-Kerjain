@@ -25,8 +25,8 @@ module.exports = {
         totalPage,
         limit,
         totalData,
-        nextLink: nextLink && `http://localhost:3000/home/home?${nextLink}`,
-        prevLink: prevLink && `http://localhost:3000/home/home?${prevLink}`
+        nextLink: nextLink && `${process.env.URL_BE}home/home?${nextLink}`,
+        prevLink: prevLink && `${process.env.URL_BE}home/home?${prevLink}`
       }
       const result = await get(limit, offset, sort, search)
       return response(res, 200, 'Success get data', result, pageInfo)
