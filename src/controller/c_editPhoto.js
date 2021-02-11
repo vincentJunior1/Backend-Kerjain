@@ -14,7 +14,7 @@ module.exports = {
         if (req.file === undefined) {
           user_image = checkId
         } else {
-          if (checkId !== '' || checkId !== null) {
+          if (checkId !== '' && checkId !== null) {
             fs.unlink(`uploads/workers/${checkId}`, function (err) {
               if (err) {
                 throw err
@@ -22,7 +22,6 @@ module.exports = {
             })
           }
           user_image = req.file.filename
-          console.log('ini nama file ' + user_image)
         }
 
         const setData = {
